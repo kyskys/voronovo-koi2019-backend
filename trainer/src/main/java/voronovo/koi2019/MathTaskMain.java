@@ -182,8 +182,8 @@ public class MathTaskMain {
     }
 
     public static void main(String[] args) {
-//        RegExpUtil.findAll("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", RegexConst.VARIABLE_REGEX).forEach(System.out::println);
-//        RegExpUtil.findAllUnique("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", RegexConst.VARIABLE_REGEX).forEach(System.out::println);
+//        voronovo.koi2019.util.RegExpUtil.findAll("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", voronovo.koi2019.util.RegexConst.VARIABLE_REGEX).forEach(System.out::println);
+//        voronovo.koi2019.util.RegExpUtil.findAllUnique("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", voronovo.koi2019.util.RegexConst.VARIABLE_REGEX).forEach(System.out::println);
         TaskContext taskContext = new TaskContext("[var1] + [var2]", "var1 == 10 <> var2 between 50;55");
         int max = 100;
         int min = 10;
