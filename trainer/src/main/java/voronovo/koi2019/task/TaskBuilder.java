@@ -5,6 +5,7 @@ import voronovo.koi2019.api.Calculator;
 import voronovo.koi2019.condition.Precondition;
 import voronovo.koi2019.condition.PreconditionParser;
 import voronovo.koi2019.util.RegExpUtil;
+import voronovo.koi2019.util.RegexConst;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,224 +1,193 @@
 package voronovo.koi2019;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import voronovo.koi2019.api.AnswerGenerator;
+import voronovo.koi2019.api.Calculator;
+import voronovo.koi2019.task.Task;
+import voronovo.koi2019.task.TaskBuilder;
+
+import java.util.Stack;
 
 public class MathTaskMain {
 
-    public static class RegexConst {
-        /**
-         * Переменная должна иметь порядковый номер и находиться в квадратных скобках
-         * пример: [var1]
-         */
-        public static final String VARIABLE_REGEX = "(?<=\\[)var[\\d]+(?=\\])";
-    }
-
-    public static class RegExpUtil {
-        public static List<String> findAllUnique(String string, String regex) {
-            return findAll(string, regex).stream().distinct().collect(Collectors.toList());
-        }
-
-        public static List<String> findAll(String string, String regex) {
-            List<String> allMatches = new ArrayList<>();
-            Matcher matcher = Pattern.compile(regex).matcher(string);
-            while (matcher.find()) {
-                allMatches.add(matcher.group());
-            }
-            return allMatches;
-        }
-    }
-
-    public static class TaskContext {
-        private Map<String, Integer> variablesMap = new HashMap<>();
-        private List<Precondition> preconditions;
-        private List<Precondition> postconditions;
-        private String expression;
-
-        public TaskContext(String expression, String preconditions) {
-            this.expression = expression;
-            RegExpUtil.findAllUnique(expression, RegexConst.VARIABLE_REGEX).forEach(value -> variablesMap.put(value, null));
-            this.preconditions = PreconditionParser.parse(preconditions);
-            handlePreconditions();
-        }
-
-        private void handlePreconditions() {
-            for (Precondition precondition : preconditions) {
-                //TODO тут возможность инициализации через другие переменные заложить через VariableInitListener
-                variablesMap.put(precondition.getVariable(), precondition.getPreconditionType().generateValue(precondition.getValue()));
-            }
-        }
-
-        public Map<String, Integer> getVariablesMap() {
-            return variablesMap;
-        }
-
-        public String getResult() {
-            String result = expression;
-            for (Map.Entry<String, Integer> entry: variablesMap.entrySet()) {
-                result = result.replaceAll("\\[" + entry.getKey() + "]", entry.getValue().toString());
-            }
-            return result;
-        }
-
-    }
-
-
-    public enum PreconditionType {
-        //        GT(">"),
-        //        LT("<"),
-        EQ("==") {
-            @Override
-            public int generateValue(String value) {
-                return Integer.parseInt(value);
-            }
-        },
-        //        NOT_EQ("!="),
-        //        LT_OR_EQ("<="),
-        //        GT_OR_EQ(">="),
-        BETWEEN("between") {
-            @Override
-            public int generateValue(String value) {
-                String[] split = value.split(";");
-                int min = Integer.parseInt(split[0]);
-                int max = Integer.parseInt(split[1]);
-                return (int) Math.round(Math.random() * (max - min) + min);
-            }
-        };
-
-        private final String identifier;
-
-        PreconditionType(String identifier) {
-            this.identifier = identifier;
-        }
-
-        public static PreconditionType byIdentifier(String identifier) {
-            return EnumSet.allOf(PreconditionType.class).stream().filter(value -> value.identifier.equals(identifier)).findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"));
-        }
-
-        public abstract int generateValue(String value);
-    }
-
-    public class VariableInitListener {
-        private TaskContext taskContext;
-        private String variableId;
-        private Precondition precondition;
-
-        VariableInitListener create(String variableId, Precondition precondition, TaskContext taskContext) {
-            return new VariableInitListener(variableId, precondition, taskContext);
-        }
-
-        private VariableInitListener(String variableId, Precondition precondition, TaskContext taskContext) {
-            this.taskContext = taskContext;
-            this.precondition = precondition;
-            this.variableId = variableId;
-        }
-
-        public Optional<VariableInitListener> tryToCalculate() {
-            return null;
-//            precondition.getPreconditionType().generateValue();
-        }
-    }
-
-
-    //на случай если нужно использовать несколько условий OR нужно отдельный чек, который внутри будет проверять всё что в нём лежит
-    public interface Checker {
-        boolean check(TaskContext taskContext);
-    }
-
-    public static class Precondition {
-        private final String variable;
-        private final PreconditionType preconditionType;
-        private final String value;
-
-        public Precondition(String variable, PreconditionType preconditionType, String value) {
-            this.variable = variable;
-            this.preconditionType = preconditionType;
-            this.value = value;
-        }
-
-
-        public String getValue() {
-            return value;
-        }
-
-        public PreconditionType getPreconditionType() {
-            return preconditionType;
-        }
-
-        public String getVariable() {
-            return variable;
-        }
-    }
-
-    public static class PreconditionParser {
-        public static List<Precondition> parse(String conditions) {
-            if (conditions != null) {
-                return Arrays.stream(conditions.split("<>")).map(strCondition -> {
-                    String[] conditionParts = strCondition.trim().split(" ");
-                    return new Precondition(conditionParts[0], PreconditionType.byIdentifier(conditionParts[1]), conditionParts[2]);
-                }).collect(Collectors.toList());
-            }
-            return new ArrayList<>();
-        }
-    }
-
-    public static class VaraibleInitQueue {
+//    public class VariableInitListener {
+//        private voronovo.koi2019.task.TaskBuilder taskContext;
+//        private String variableId;
+//        private voronovo.koi2019.condition.Precondition precondition;
 //
-//        private void addListener(String variableId, ) {
-//
+//        VariableInitListener create(String variableId, voronovo.koi2019.condition.Precondition precondition, voronovo.koi2019.task.TaskBuilder taskContext) {
+//            return new VariableInitListener(variableId, precondition, taskContext);
 //        }
-
-    }
+//
+//        private VariableInitListener(String variableId, voronovo.koi2019.condition.Precondition precondition, voronovo.koi2019.task.TaskBuilder taskContext) {
+//            this.taskContext = taskContext;
+//            this.precondition = precondition;
+//            this.variableId = variableId;
+//        }
+//
+//        public Optional<VariableInitListener> tryToCalculate() {
+//            return null;
+////            precondition.getPreconditionType().generateValue();
+//        }
+//    }
 
     public static void main(String[] args) {
 //        voronovo.koi2019.util.RegExpUtil.findAll("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", voronovo.koi2019.util.RegexConst.VARIABLE_REGEX).forEach(System.out::println);
 //        voronovo.koi2019.util.RegExpUtil.findAllUnique("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", voronovo.koi2019.util.RegexConst.VARIABLE_REGEX).forEach(System.out::println);
-        TaskContext taskContext = new TaskContext("[var1] + [var2]", "var1 == 10 <> var2 between 50;55");
-        int max = 100;
-        int min = 10;
-        System.out.println(Math.round(Math.random() * (max - min) + min));
-
-
-
-//        String first = "a+b";
-//        String conditions = "Положительный ответ";
-//        int lvl = 3;
-//        boolean onlyPositiveNumber = true;
-//        boolean onlyPositiveAnswer = true;
-//        String valueRange = getLvlModifier(lvl);
-//        Map<String, Integer> vars = new HashMap<>();
-//        while (!conditionsSatisfied(conditions, )) {
-//            String[] split = valueRange.split("-");
-//            int min = Integer.parseInt(split[0]);
-//            int max = Integer.parseInt(split[1]);
-//            int a = (int) Math.round(Math.random() * (max - min) + min);
-//            int b = (int) Math.round(Math.random() * (max - min) + min);
-//        }
+        TaskBuilder taskBuilder = new TaskBuilder("[var1] + [var2] + [var3] + [var444]", "var1 between 1;100 <> var2 between 50;55 <> var3 between 3;33 <> var444 == 9", new Calculator() {}, new AnswerGenerator() {});
+        //3 варианта неправильных ответов
+        Task build = taskBuilder.build(3);
+        System.out.println(build.toString());
+        RPN rpn = new RPN();
+        System.out.println(rpn.Calculate("2+2*2"));
     }
 
-    private static boolean conditionsSatisfied() {
+
+    static private boolean IsOperator(char с)
+    {
+        if (("+-/*^()".indexOf(с) != -1))
+            return true;
         return false;
     }
 
-
-    private static String getLvlModifier(int lvl) {
-        if (lvl == 3) {
-            return "100-999";
-        } else {
-            return "";
+    //Метод возвращает приоритет оператора
+    static private byte GetPriority(char s)
+    {
+        switch (s)
+        {
+            case '(': return 0;
+            case ')': return 1;
+            case '+': return 2;
+            case '-': return 3;
+            case '*': return 4;
+            case '/': return 4;
+            case '^': return 5;
+            default: return 6;
         }
     }
+    //"Входной" метод класса
 
 
+    //Метод возвращает true, если проверяемый символ - разделитель ("пробел" или "равно")
+    static private boolean IsDelimeter(char c)
+    {
+        if ((" =".indexOf(c) != -1))
+            return true;
+        return false;
+    }
+
+    static class RPN
+    {
+        //Метод Calculate принимает выражение в виде строки и возвращает результат, в своей работе использует другие методы класса
+        public double Calculate(String input)
+        {
+            String output = GetExpression(input); //Преобразовываем выражение в постфиксную запись
+            double result = Counting(output); //Решаем полученное выражение
+            return result; //Возвращаем результат
+        }
+
+        //Метод, преобразующий входную строку с выражением в постфиксную запись
+        public String GetExpression(String input)
+        {
+            String output = ""; //Строка для хранения выражения
+            Stack<Character> operStack = new Stack<Character>(); //Стек для хранения операторов
+
+            for (int i = 0; i < input.length(); i++) //Для каждого символа в входной строке
+            {
+                //Разделители пропускаем
+                if (IsDelimeter(input.charAt(i)))
+                    continue; //Переходим к следующему символу
+
+                //Если символ - цифра, то считываем все число
+                if (Character.isDigit(input.charAt(i))) //Если цифра
+                {
+                    //Читаем до разделителя или оператора, что бы получить число
+                    while (!IsDelimeter(input.charAt(i)) && !IsOperator(input.charAt(i)))
+                    {
+                        output += input.charAt(i); //Добавляем каждую цифру числа к нашей строке
+                        i++; //Переходим к следующему символу
+
+                        if (i == input.length()) break; //Если символ - последний, то выходим из цикла
+                    }
+
+                    output += " "; //Дописываем после числа пробел в строку с выражением
+                    i--; //Возвращаемся на один символ назад, к символу перед разделителем
+                }
+
+                //Если символ - оператор
+                if (IsOperator(input.charAt(i))) //Если оператор
+                {
+                    if (input.charAt(i) == '(') //Если символ - открывающая скобка
+                        operStack.push(input.charAt(i)); //Записываем её в стек
+                    else if (input.charAt(i) == ')') //Если символ - закрывающая скобка
+                    {
+                        //Выписываем все операторы до открывающей скобки в строку
+                        char s = operStack.pop();
+
+                        while (s != '(')
+                        {
+                            output += s + ' ';
+                            s = operStack.pop();
+                        }
+                    }
+                    else //Если любой другой оператор
+                    {
+                        if (operStack.size() > 0) //Если в стеке есть элементы
+                            if (GetPriority(input.charAt(i)) <= GetPriority(operStack.peek())) //И если приоритет нашего оператора меньше или равен приоритету оператора на вершине стека
+                                output += operStack.pop().toString() + " "; //То добавляем последний оператор из стека в строку с выражением
+
+                        operStack.push(input.charAt(i)); //Если стек пуст, или же приоритет оператора выше - добавляем операторов на вершину стека
+
+                    }
+                }
+            }
+
+            //Когда прошли по всем символам, выкидываем из стека все оставшиеся там операторы в строку
+            while (operStack.size() > 0)
+                output += operStack.pop() + " ";
+
+            return output; //Возвращаем выражение в постфиксной записи
+        }
+
+        //Метод, вычисляющий значение выражения, уже преобразованного в постфиксную запись
+        public double Counting(String input)
+        {
+            double result = 0; //Результат
+            Stack<Double> temp = new Stack<Double>(); //Dhtvtyysq стек для решения
+
+            for (int i = 0; i < input.length(); i++) //Для каждого символа в строке
+            {
+                //Если символ - цифра, то читаем все число и записываем на вершину стека
+                if (Character.isDigit(input.charAt(i)))
+                {
+                    String a = "";
+
+                    while (!IsDelimeter(input.charAt(i)) && !IsOperator(input.charAt(i))) //Пока не разделитель
+                    {
+                        a += input.charAt(i); //Добавляем
+                        i++;
+                        if (i == input.length()) break;
+                    }
+                    temp.push(Double.valueOf(a)); //Записываем в стек
+                    i--;
+                }
+                else if (IsOperator(input.charAt(i))) //Если символ - оператор
+                {
+                    //Берем два последних значения из стека
+                    double a = temp.pop();
+                    double b = temp.pop();
+
+                    switch (input.charAt(i)) //И производим над ними действие, согласно оператору
+                    {
+                        case '+': result = b + a; break;
+                        case '-': result = b - a; break;
+                        case '*': result = b * a; break;
+                        case '/': result = b / a; break;
+                        case '^': result = Math.pow(b, a); break;
+                    }
+                    temp.push(result); //Результат вычисления записываем обратно в стек
+                }
+            }
+            return temp.peek(); //Забираем результат всех вычислений из стека и возвращаем его
+        }
+    }
 }
