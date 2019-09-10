@@ -1,4 +1,4 @@
-package voronovo.koi2019.util;
+package voronovo.koi2019.generation.util;
 
 public class RegexConst {
     /**

@@ -1,11 +1,11 @@
-package voronovo.koi2019.task;
+package voronovo.koi2019.generation.task;
 
-import voronovo.koi2019.api.AnswerGenerator;
-import voronovo.koi2019.api.Calculator;
-import voronovo.koi2019.condition.Precondition;
-import voronovo.koi2019.condition.PreconditionParser;
-import voronovo.koi2019.util.RegExpUtil;
-import voronovo.koi2019.util.RegexConst;
+import voronovo.koi2019.generation.api.AnswerGenerator;
+import voronovo.koi2019.generation.api.Calculator;
+import voronovo.koi2019.generation.condition.Precondition;
+import voronovo.koi2019.generation.condition.PreconditionParser;
+import voronovo.koi2019.generation.util.RegExpUtil;
+import voronovo.koi2019.generation.util.RegexConst;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package voronovo.koi2019.condition;
+package voronovo.koi2019.generation.condition;
 
 public class Precondition {
     private final String variable;

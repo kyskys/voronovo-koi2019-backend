@@ -1,4 +1,4 @@
-package voronovo.koi2019.api;
+package voronovo.koi2019.generation.api;
 
 import java.util.HashSet;
 import java.util.List;

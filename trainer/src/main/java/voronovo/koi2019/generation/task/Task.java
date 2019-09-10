@@ -1,4 +1,4 @@
-package voronovo.koi2019.task;
+package voronovo.koi2019.generation.task;
 
 import java.util.List;
 

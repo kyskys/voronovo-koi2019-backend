@@ -1,4 +1,4 @@
-package voronovo.koi2019.condition;
+package voronovo.koi2019.generation.condition;
 
 import java.util.ArrayList;
 import java.util.Arrays;

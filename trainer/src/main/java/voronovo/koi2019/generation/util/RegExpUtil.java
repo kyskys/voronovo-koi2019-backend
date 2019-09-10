@@ -1,4 +1,4 @@
-package voronovo.koi2019.util;
+package voronovo.koi2019.generation.util;
 
 import java.util.ArrayList;
 import java.util.List;
