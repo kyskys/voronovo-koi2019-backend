@@ -17,6 +17,5 @@ public class Score {
     private Long id;
     private LocalTime time;
     private LocalDate date;
-    private Integer position;
     private String name;
 }
