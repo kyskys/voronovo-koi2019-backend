@@ -1,5 +1,7 @@
 package voronovo.koi2019.generation.task;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.api.AnswerGenerator;
 import voronovo.koi2019.generation.api.Calculator;
 import voronovo.koi2019.generation.condition.Precondition;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TaskBuilder {
+
     private Map<String, Integer> variablesMap = new HashMap<>();
     private List<Precondition> preconditions;
     private List<Precondition> postconditions;
@@ -20,10 +23,11 @@ public class TaskBuilder {
     private AnswerGenerator answerGenerator;
 
 
-    public TaskBuilder(String expression, String preconditions, Calculator calculator, AnswerGenerator answerGenerator) {
-        this.expression = expression;
-        RegExpUtil.findAllUnique(expression, RegexConst.VARIABLE_REGEX).forEach(value -> variablesMap.put(value, null));
-        this.preconditions = PreconditionParser.parse(preconditions);
+    public TaskBuilder(String sample, Calculator calculator, AnswerGenerator answerGenerator) {
+        String[] data = sample.split(RegexConst.SEPARATOR);
+        this.expression = data[0].trim();
+        //RegExpUtil.findAllUnique(expression, RegexConst.VARIABLE_REGEX).forEach(value -> variablesMap.put(value, null));
+        this.preconditions = PreconditionParser.parse(data[1].trim());
         this.calculator = calculator;
         this.answerGenerator = answerGenerator;
         initVariables();
