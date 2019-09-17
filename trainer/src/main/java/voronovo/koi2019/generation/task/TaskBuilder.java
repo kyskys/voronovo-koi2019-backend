@@ -1,20 +1,20 @@
 package voronovo.koi2019.generation.task;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.api.AnswerGenerator;
 import voronovo.koi2019.generation.api.Calculator;
 import voronovo.koi2019.generation.condition.Precondition;
 import voronovo.koi2019.generation.condition.PreconditionParser;
 import voronovo.koi2019.generation.util.RegExpUtil;
-import voronovo.koi2019.generation.util.RegexConst;
+import voronovo.koi2019.generation.util.ConstantsHolder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TaskBuilder {
-
     private Map<String, Integer> variablesMap = new HashMap<>();
     private List<Precondition> preconditions;
     private List<Precondition> postconditions;
@@ -24,9 +24,9 @@ public class TaskBuilder {
 
 
     public TaskBuilder(String sample, Calculator calculator, AnswerGenerator answerGenerator) {
-        String[] data = sample.split(RegexConst.SEPARATOR);
+        String[] data = sample.split(ConstantsHolder.SEPARATOR);
         this.expression = data[0].trim();
-        //RegExpUtil.findAllUnique(expression, RegexConst.VARIABLE_REGEX).forEach(value -> variablesMap.put(value, null));
+        RegExpUtil.findAllUnique(expression, ConstantsHolder.VARIABLE_REGEX).forEach(value -> variablesMap.put(value, null));
         this.preconditions = PreconditionParser.parse(data[1].trim());
         this.calculator = calculator;
         this.answerGenerator = answerGenerator;
@@ -52,5 +52,12 @@ public class TaskBuilder {
             result = result.replaceAll("\\[" + entry.getKey() + "]", entry.getValue().toString());
         }
         return result;
+    }
+
+    public List<Task> buildBatch(Integer amount, Integer incorrectAnswers) {
+        return IntStream
+                .range(0, Optional.ofNullable(amount).orElse(ConstantsHolder.DEFAULT_BATCH_SIZE))
+                .mapToObj(i -> build(Optional.ofNullable(incorrectAnswers).orElse(ConstantsHolder.DEFAULT_INCORRECT_ANSWERS)))
+                .collect(Collectors.toList());
     }
 }

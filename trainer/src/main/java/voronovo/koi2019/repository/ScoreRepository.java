@@ -5,7 +5,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 import voronovo.koi2019.entity.Score;
 
-@RepositoryRestResource(collectionResourceRel = "score", path = "score", itemResourceRel = "score")
+@RepositoryRestResource
 public interface ScoreRepository extends PagingAndSortingRepository<Score, Long> {
 
 }

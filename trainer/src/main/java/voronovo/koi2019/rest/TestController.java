@@ -1,20 +1,19 @@
 package voronovo.koi2019.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
-import voronovo.koi2019.generation.api.AnswerGenerator;
-import voronovo.koi2019.generation.api.JavaScriptCalculator;
-import voronovo.koi2019.generation.api.SimpleIntegerResultCalculator;
 import voronovo.koi2019.generation.builder.CategoryNode;
 import voronovo.koi2019.generation.builder.GeneratorBuilder;
 import voronovo.koi2019.generation.task.Task;
 import voronovo.koi2019.generation.task.TaskBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static voronovo.koi2019.rest.TestController.CATEGORIES_URL_PART;
 
@@ -29,10 +28,11 @@ public class TestController {
     private GeneratorBuilder generatorBuilder;
 
     @GetMapping("**/generate")
-    public Task getGenerator(HttpServletRequest request) {
-        String generator = generatorBuilder.findNode(getGeneratorNodePath(request)).getGenerator();
-        TaskBuilder taskBuilder = new TaskBuilder(generator, new JavaScriptCalculator(), new AnswerGenerator() {});
-        return taskBuilder.build(3);
+    public List<Task> getGenerator(HttpServletRequest request,
+                                   @RequestParam(value = "amount", required = false) Integer amount,
+                                   @RequestParam(value = "incorrectAnswers", required = false) Integer incorrectAnswers) {
+        TaskBuilder taskBuilder = generatorBuilder.findNode(getGeneratorNodePath(request)).getGenerator();
+        return taskBuilder.buildBatch(amount, incorrectAnswers);
     }
 
     @GetMapping("**")

@@ -4,15 +4,14 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
 @Data
-public class Score {
+public class Test {
     @Id
     private Long id;
-    private LocalTime time;
-    private LocalDate date;
     private String name;
+    private String value;
+    private String[] answers;
+    private String correctAnswer;
 }

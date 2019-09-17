@@ -1,8 +1,11 @@
 package voronovo.koi2019.generation.builder;
 
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
+import voronovo.koi2019.generation.api.AnswerGenerator;
+import voronovo.koi2019.generation.api.JavaScriptCalculator;
+import voronovo.koi2019.generation.task.TaskBuilder;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -13,19 +16,22 @@ import java.util.stream.Stream;
 @Component
 public class GeneratorBuilder {
 
-    @Autowired
-    private GeneratorNameConfig generatorNames;
-    @Autowired
-    private GeneratorSampleConfig generatorSamples;
-    @Getter
+    private final GeneratorNameConfig generatorNames;
+    private final GeneratorSampleConfig generatorSamples;
     private CategoryNode rootNode;
+
+    public GeneratorBuilder(GeneratorNameConfig generatorNames, GeneratorSampleConfig generatorSamples) {
+        this.generatorNames = generatorNames;
+        this.generatorSamples = generatorSamples;
+    }
 
     @PostConstruct
     private void postConstruct() {
         rootNode = new CategoryNode();
         generatorSamples.getSamples().forEach((path, sample) -> {
             CategoryNode lastNode = findNode(path, rootNode);
-            lastNode.setGenerator(sample);
+            TaskBuilder builder = new TaskBuilder(sample, new JavaScriptCalculator(), new AnswerGenerator() {});
+            lastNode.setGenerator(builder);
         });
     }
 
