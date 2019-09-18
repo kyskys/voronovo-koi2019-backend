@@ -1,11 +1,9 @@
 package voronovo.koi2019.generation.builder;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.api.AnswerGenerator;
 import voronovo.koi2019.generation.api.JavaScriptCalculator;
-import voronovo.koi2019.generation.task.TaskBuilder;
+import voronovo.koi2019.generation.test.TestBuilder;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -30,7 +28,7 @@ public class GeneratorBuilder {
         rootNode = new CategoryNode();
         generatorSamples.getSamples().forEach((path, sample) -> {
             CategoryNode lastNode = findNode(path, rootNode);
-            TaskBuilder builder = new TaskBuilder(sample, new JavaScriptCalculator(), new AnswerGenerator() {});
+            TestBuilder builder = new TestBuilder(sample, new JavaScriptCalculator(), new AnswerGenerator() {});
             lastNode.setGenerator(builder);
         });
     }

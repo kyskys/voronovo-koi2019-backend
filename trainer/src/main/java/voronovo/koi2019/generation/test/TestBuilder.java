@@ -1,5 +1,6 @@
-package voronovo.koi2019.generation.task;
+package voronovo.koi2019.generation.test;
 
+import voronovo.koi2019.entity.Test;
 import voronovo.koi2019.generation.api.AnswerGenerator;
 import voronovo.koi2019.generation.api.Calculator;
 import voronovo.koi2019.generation.condition.Precondition;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TaskBuilder {
+public class TestBuilder {
     private Map<String, Integer> variablesMap = new HashMap<>();
     private List<Precondition> preconditions;
     private List<Precondition> postconditions;
@@ -23,7 +24,7 @@ public class TaskBuilder {
     private AnswerGenerator answerGenerator;
 
 
-    public TaskBuilder(String sample, Calculator calculator, AnswerGenerator answerGenerator) {
+    public TestBuilder(String sample, Calculator calculator, AnswerGenerator answerGenerator) {
         String[] data = sample.split(ConstantsHolder.SEPARATOR);
         this.expression = data[0].trim();
         RegExpUtil.findAllUnique(expression, ConstantsHolder.VARIABLE_REGEX).forEach(value -> variablesMap.put(value, null));
@@ -39,11 +40,11 @@ public class TaskBuilder {
         }
     }
 
-    public Task build(int incorrectAnswers) {
+    public Test build(int incorrectAnswers) {
         String finalExpression = getFinalExpression();
         String answer = calculator.calculateExpression(finalExpression);
         List<String> answers = answerGenerator.generateAnswers(answer, incorrectAnswers);
-        return new Task(finalExpression, answers, answer);
+        return new Test(finalExpression, answers, answer);
     }
 
     public String getFinalExpression() {
@@ -54,7 +55,7 @@ public class TaskBuilder {
         return result;
     }
 
-    public List<Task> buildBatch(Integer amount, Integer incorrectAnswers) {
+    public List<Test> buildBatch(Integer amount, Integer incorrectAnswers) {
         return IntStream
                 .range(0, Optional.ofNullable(amount).orElse(ConstantsHolder.DEFAULT_BATCH_SIZE))
                 .mapToObj(i -> build(Optional.ofNullable(incorrectAnswers).orElse(ConstantsHolder.DEFAULT_INCORRECT_ANSWERS)))

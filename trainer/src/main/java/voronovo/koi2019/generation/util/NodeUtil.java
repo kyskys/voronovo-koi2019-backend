@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.builder.CategoryNode;
 import voronovo.koi2019.generation.builder.GeneratorNameConfig;
 
-import javax.xml.soap.Node;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import voronovo.koi2019.generation.task.TaskBuilder;
+import voronovo.koi2019.generation.test.TestBuilder;
 import voronovo.koi2019.generation.util.NodeUtil;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.Objects;
 public class CategoryNode {
     private Map<String, CategoryNode> nodes = new HashMap<>();
     @JsonIgnore
-    private TaskBuilder generator;
+    private TestBuilder generator;
     @JsonIgnore
     private String name;
     private String title;
