@@ -19,6 +19,17 @@ public class RegExpUtil {
         return allMatches;
     }
 
+    public static String handleSigns(String result) {
+        String pattern = "[+\\-*/]{2,}";
+        Matcher matcher = Pattern.compile(pattern).matcher(result);
+        while (matcher.find()) {
+            String signs = matcher.group();
+            int randomSign = (int) Math.round(Math.random() * (signs.length() - 1) + 0);
+            result = matcher.replaceFirst(String.valueOf(signs.charAt(randomSign)));
+        }
+        return result;
+    }
+
     public static String convertExpressionToJs(String expression) {
         LinkedHashMap<String, String> variables = new LinkedHashMap<>();
 
@@ -61,5 +72,15 @@ public class RegExpUtil {
         String[] parts = entry.getValue().split("\\^");
         value = value.replaceAll(entry.getKey(), String.format("Math.pow(%s,%s)", parts[0], parts[1]));
         return value;
+    }
+
+    public static String handleNegativeSigns(String result) {
+        String pattern = "([+\\-*])([+\\-*]\\d+)";
+        return result.replaceAll(pattern, "$1($2)");
+//        Matcher matcher = Pattern.compile(pattern).matcher(result);
+//        while (matcher.find()) {
+//            result = matcher.replaceFirst("(" + matcher.group() + ")");
+//        }
+//        return result;
     }
 }

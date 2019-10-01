@@ -3,9 +3,7 @@ package voronovo.koi2019.entity;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -14,7 +12,8 @@ public class Test {
     @Id
     private Long id;
     private String expression;
-    @Type( type = "string-array" )
+    @ElementCollection
+    @CollectionTable(name = "answer", joinColumns = @JoinColumn(name = "test_id"))
     private List<String> allOptions;
     private String correctAnswer;
 
