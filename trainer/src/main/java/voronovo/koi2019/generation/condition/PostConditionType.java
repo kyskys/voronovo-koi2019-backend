@@ -10,6 +10,11 @@ public enum PostConditionType {
         public boolean isValid(Test test) {
             return test.getCorrectAnswer().matches("-?\\d+(\\.\\d+)?");
         }
+
+        @Override
+        public PostCondition getCondition(String value) {
+            return new PostCondition(this);
+        }
     };
 
     private final String identifier;
@@ -18,10 +23,13 @@ public enum PostConditionType {
         this.identifier = identifier;
     }
 
-    public static PostConditionType byIdentifier(String identifier) {
-        return EnumSet.allOf(PostConditionType.class).stream().filter(value -> value.identifier.equals(identifier)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"));
+    public static PostCondition find(String condition) {
+        return EnumSet.allOf(PostConditionType.class).stream().filter(value -> condition.contains(value.identifier)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"))
+                .getCondition(condition);
     }
 
     public abstract boolean isValid(Test test);
+
+    public abstract PostCondition getCondition(String value);
 }

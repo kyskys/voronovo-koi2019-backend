@@ -1,5 +1,6 @@
 package voronovo.koi2019.generation.condition;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
@@ -14,7 +15,7 @@ public enum PreConditionType {
         @Override
         public PreCondition getCondition(String value) {
             String[] conditionParts = value.trim().split(" ");
-            return new PreCondition(conditionParts[0], PreConditionType.byIdentifier(conditionParts[1]), conditionParts[2]);
+            return new PreCondition(conditionParts[0], this, conditionParts[2]);
         }
     },
     BETWEEN("between") {
@@ -26,15 +27,15 @@ public enum PreConditionType {
                     .findAny()
                     .get();
             String[] split = interval.split(";");
-            int min = Integer.parseInt(split[0]);
-            int max = Integer.parseInt(split[1]);
+            int min = Integer.parseInt(split[0].trim());
+            int max = Integer.parseInt(split[1].trim());
             return (int) Math.round(Math.random() * (max - min) + min);
         }
 
         @Override
         public PreCondition getCondition(String value) {
-            String[] conditionParts = value.trim().split(" ");
-            return new PreCondition(conditionParts[0], PreConditionType.byIdentifier(conditionParts[1]), conditionParts[2]);
+            String[] conditionParts = value.trim().split(" ", 3);
+            return new PreCondition(conditionParts[0], this, conditionParts[2]);
         }
     };
 
@@ -44,9 +45,10 @@ public enum PreConditionType {
         this.identifier = identifier;
     }
 
-    public static PreConditionType byIdentifier(String identifier) {
-        return EnumSet.allOf(PreConditionType.class).stream().filter(value -> value.identifier.equals(identifier)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"));
+    public static PreCondition find(String condition) {
+        return EnumSet.allOf(PreConditionType.class).stream().filter(value -> condition.contains(value.identifier)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"))
+                .getCondition(condition);
     }
 
     public abstract int generateValue(String value);

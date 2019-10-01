@@ -10,20 +10,14 @@ import static voronovo.koi2019.generation.util.ConstantsHolder.CONDITIONS_SEPARA
 public class ConditionsParser {
     public static List<PreCondition> parsePre(String conditions) {
         if (conditions != null) {
-            return Arrays.stream(conditions.split(CONDITIONS_SEPARATOR)).map(strCondition -> {
-                String[] conditionParts = strCondition.trim().split(" ");
-                return new PreCondition(conditionParts[0], PreConditionType.byIdentifier(conditionParts[1]), conditionParts[2]);
-            }).collect(Collectors.toList());
+            return Arrays.stream(conditions.split(CONDITIONS_SEPARATOR)).map(PreConditionType::find).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
 
     public static List<PostCondition> parsePost(String conditions) {
         if (conditions != null) {
-            return Arrays.stream(conditions.split(CONDITIONS_SEPARATOR)).map(strCondition -> {
-                String[] conditionParts = strCondition.trim().split(" ");
-                return new PostCondition(conditionParts[0], PreConditionType.byIdentifier(conditionParts[1]), conditionParts[2]);
-            }).collect(Collectors.toList());
+            return Arrays.stream(conditions.split(CONDITIONS_SEPARATOR)).map(PostConditionType::find).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }

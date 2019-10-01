@@ -22,12 +22,14 @@ public class RegExpUtil {
     public static String handleSigns(String result) {
         String pattern = "[+\\-*/]{2,}";
         Matcher matcher = Pattern.compile(pattern).matcher(result);
+        String toReturn = result;
         while (matcher.find()) {
             String signs = matcher.group();
             int randomSign = (int) Math.round(Math.random() * (signs.length() - 1) + 0);
-            result = matcher.replaceFirst(String.valueOf(signs.charAt(randomSign)));
+            toReturn = matcher.replaceFirst(String.valueOf(signs.charAt(randomSign)));
+            matcher.reset(toReturn);
         }
-        return result;
+        return toReturn;
     }
 
     public static String convertExpressionToJs(String expression) {
@@ -37,24 +39,19 @@ public class RegExpUtil {
         List<String> allUnique = findAllUnique(expression, "(?<=^| |-|\\+|\\/|\\*)\\d+\\^\\d+");
 
         while (allUnique.size() != 0) {
-
             for (int i = 0; i < allUnique.size(); i++, index++) {
                 variables.put("jsvar" + index, allUnique.get(i));
                 expression = expression.replaceAll(Pattern.quote(allUnique.get(i)), "jsvar" + index);
             }
-
             allUnique = findAllUnique(expression, "(?<=^| |-|\\+|\\/|\\*)\\d+\\^\\d+");
         }
 
         allUnique = findAllUnique(expression, "\\([^\\(]+?\\)\\^[\\d]*");
-
         while (allUnique.size() != 0) {
-
             for (int i = 0; i < allUnique.size(); i++, index++) {
                 variables.put("jsvar" + index, allUnique.get(i));
                 expression = expression.replaceAll(Pattern.quote(allUnique.get(i)), "jsvar" + index);
             }
-
             allUnique = findAllUnique(expression, "\\([^\\(]+?\\)\\^[\\d]*");
         }
 

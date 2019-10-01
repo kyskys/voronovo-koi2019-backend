@@ -2,7 +2,7 @@ package voronovo.koi2019.generation.builder;
 
 import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.api.AnswerGenerator;
-import voronovo.koi2019.generation.api.JavaScriptCalculator;
+import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
 import voronovo.koi2019.generation.test.TestBuilder;
 
 import javax.annotation.PostConstruct;

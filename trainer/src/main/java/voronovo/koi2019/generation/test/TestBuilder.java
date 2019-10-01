@@ -2,7 +2,7 @@ package voronovo.koi2019.generation.test;
 
 import voronovo.koi2019.entity.Test;
 import voronovo.koi2019.generation.api.AnswerGenerator;
-import voronovo.koi2019.generation.api.Calculator;
+import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.generation.condition.PostCondition;
 import voronovo.koi2019.generation.condition.PreCondition;
 import voronovo.koi2019.generation.condition.ConditionsParser;
@@ -24,7 +24,6 @@ public class TestBuilder {
     private Calculator calculator;
     private AnswerGenerator answerGenerator;
 
-
     public TestBuilder(String sample, Calculator calculator, AnswerGenerator answerGenerator) {
         String[] data = sample.split(ConstantsHolder.SEPARATOR);
         this.expression = data[0].trim();
@@ -45,7 +44,16 @@ public class TestBuilder {
         String finalExpression = getFinalExpression();
         String answer = calculator.calculateExpression(finalExpression);
         List<String> answers = answerGenerator.generateAnswers(answer, incorrectAnswers);
-        return new Test(finalExpression, answers, answer);
+        Test test = new Test(finalExpression, answers, answer);
+        if(this.postConditions != null) {
+            boolean needToRestart = this.postConditions
+                    .stream()
+                    .map(postCondition -> postCondition.getPreconditionType().isValid(test))
+                    .reduce((b1, b2) -> b1 || b2)
+                    .orElseThrow(() -> new IllegalArgumentException("wrong post conditions configuration"));
+            return needToRestart ? build(incorrectAnswers) : test;
+        };
+        return test;
     }
 
     public String getFinalExpression() {

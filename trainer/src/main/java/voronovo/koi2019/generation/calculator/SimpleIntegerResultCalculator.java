@@ -1,4 +1,4 @@
-package voronovo.koi2019.generation.api;
+package voronovo.koi2019.generation.calculator;
 
 import java.util.Stack;
 
