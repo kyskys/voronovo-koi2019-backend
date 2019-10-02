@@ -10,7 +10,7 @@ public class ConstantsHolder {
      */
     public static final String VARIABLE_REGEX = "(?<=\\[)var[\\d]+(?=\\])";
     public static final String SEPARATOR = "\\|";
-    public static final String CONDITIONS_SEPARATOR = "<>";
+    public static final String ADDITIONAL_SEPARATOR = "<>";
     public static final Integer DEFAULT_BATCH_SIZE = 15;
     public static final Integer DEFAULT_INCORRECT_ANSWERS = 3;
 }

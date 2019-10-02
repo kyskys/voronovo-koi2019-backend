@@ -14,7 +14,7 @@ public class JavaScriptCalculator implements Calculator {
         ScriptEngine engine = mgr.getEngineByName("JavaScript");
         expression = RegExpUtil.convertExpressionToJs(expression);
         try {
-            return engine.eval(expression).toString().split("\\.")[0];
+            return engine.eval(expression).toString();
         } catch (ScriptException e) {
             e.printStackTrace();
         }

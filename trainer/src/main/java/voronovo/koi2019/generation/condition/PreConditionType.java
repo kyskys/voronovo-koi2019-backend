@@ -14,7 +14,7 @@ public enum PreConditionType {
         @Override
         public PreCondition getCondition(String value) {
             String[] conditionParts = value.trim().split(" ");
-            return new PreCondition(conditionParts[0], PreConditionType.byIdentifier(conditionParts[1]), conditionParts[2]);
+            return new PreCondition(conditionParts[0], this, conditionParts[2]);
         }
     },
     BETWEEN("between") {
@@ -34,7 +34,7 @@ public enum PreConditionType {
         @Override
         public PreCondition getCondition(String value) {
             String[] conditionParts = value.trim().split(" ");
-            return new PreCondition(conditionParts[0], PreConditionType.byIdentifier(conditionParts[1]), conditionParts[2]);
+            return new PreCondition(conditionParts[0], this, conditionParts[2]);
         }
     };
 
@@ -44,9 +44,9 @@ public enum PreConditionType {
         this.identifier = identifier;
     }
 
-    public static PreConditionType byIdentifier(String identifier) {
-        return EnumSet.allOf(PreConditionType.class).stream().filter(value -> value.identifier.equals(identifier)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"));
+    public static PreCondition find(String condition) {
+        return EnumSet.allOf(PreConditionType.class).stream().filter(value -> condition.contains(value.identifier)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier")).getCondition(condition);
     }
 
     public abstract int generateValue(String value);

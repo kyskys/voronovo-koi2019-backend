@@ -4,9 +4,12 @@ import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.api.AnswerGenerator;
 import voronovo.koi2019.generation.api.JavaScriptCalculator;
 import voronovo.koi2019.generation.test.TestBuilder;
+import voronovo.koi2019.generation.util.ConstantsHolder;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,11 +19,15 @@ public class GeneratorBuilder {
 
     private final GeneratorNameConfig generatorNames;
     private final GeneratorSampleConfig generatorSamples;
+    private final GeneratorAnswerConfig generatorAnswers;
     private CategoryNode rootNode;
 
-    public GeneratorBuilder(GeneratorNameConfig generatorNames, GeneratorSampleConfig generatorSamples) {
+    public GeneratorBuilder(GeneratorNameConfig generatorNames,
+                            GeneratorSampleConfig generatorSamples,
+                            GeneratorAnswerConfig generatorAnswers) {
         this.generatorNames = generatorNames;
         this.generatorSamples = generatorSamples;
+        this.generatorAnswers = generatorAnswers;
     }
 
     @PostConstruct
@@ -39,6 +46,16 @@ public class GeneratorBuilder {
                         node.getNodes().computeIfAbsent(name, (newName) ->
                                 new CategoryNode(newName, generatorNames.getNames().get(newName))
                         ), (node, node2) -> node2);
+    }
+
+    private List<AnswerGenerator> getAnswerGenerators(String answerParameters) {
+        return Stream
+                .of(answerParameters.split(ConstantsHolder.ADDITIONAL_SEPARATOR))
+                .map(String::trim)
+                .sorted((o1, o2) -> ThreadLocalRandom.current().nextInt(-1, 2))
+                .
+                .limit(2)
+                .
     }
 
     public CategoryNode findNode(String path) {
