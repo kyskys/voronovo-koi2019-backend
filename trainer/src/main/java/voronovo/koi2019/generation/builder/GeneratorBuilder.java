@@ -1,33 +1,34 @@
 package voronovo.koi2019.generation.builder;
 
 import org.springframework.stereotype.Component;
-import voronovo.koi2019.generation.api.AnswerGenerator;
+import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
+import voronovo.koi2019.generation.condition.*;
 import voronovo.koi2019.generation.test.TestBuilder;
 import voronovo.koi2019.generation.util.ConstantsHolder;
+import voronovo.koi2019.generation.util.RegExpUtil;
+import voronovo.koi2019.generation.util.TestBuilderUtil;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static voronovo.koi2019.generation.util.ConstantsHolder.SEPARATOR;
 
 @Component
 public class GeneratorBuilder {
 
     private final GeneratorNameConfig generatorNames;
     private final GeneratorSampleConfig generatorSamples;
-    private final GeneratorAnswerConfig generatorAnswers;
     private CategoryNode rootNode;
 
     public GeneratorBuilder(GeneratorNameConfig generatorNames,
-                            GeneratorSampleConfig generatorSamples,
-                            GeneratorAnswerConfig generatorAnswers) {
+                            GeneratorSampleConfig generatorSamples) {
         this.generatorNames = generatorNames;
         this.generatorSamples = generatorSamples;
-        this.generatorAnswers = generatorAnswers;
     }
 
     @PostConstruct
@@ -35,8 +36,18 @@ public class GeneratorBuilder {
         rootNode = new CategoryNode();
         generatorSamples.getSamples().forEach((path, sample) -> {
             CategoryNode lastNode = findNode(path, rootNode);
-            TestBuilder builder = new TestBuilder(sample, new JavaScriptCalculator(), new AnswerGenerator() {});
-            lastNode.setGenerator(builder);
+            String[] sampleParameters = sample.split(SEPARATOR);
+            try {
+                TestBuilder builder = new TestBuilder(
+                        TestBuilderUtil.getGeneratorSample(sampleParameters[0]),
+                        TestBuilderUtil.getPreConditions(sampleParameters[1]),
+                        TestBuilderUtil.getPostConditions(sampleParameters[2]),
+                        TestBuilderUtil.getAnswerGenerators(sampleParameters[3]),
+                        TestBuilderUtil.getCalculator(sampleParameters[4]));
+                lastNode.setGenerator(builder);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("error while creating test builder, path \"" + path + "\"", e);
+            }
         });
     }
 
@@ -46,16 +57,6 @@ public class GeneratorBuilder {
                         node.getNodes().computeIfAbsent(name, (newName) ->
                                 new CategoryNode(newName, generatorNames.getNames().get(newName))
                         ), (node, node2) -> node2);
-    }
-
-    private List<AnswerGenerator> getAnswerGenerators(String answerParameters) {
-        return Stream
-                .of(answerParameters.split(ConstantsHolder.ADDITIONAL_SEPARATOR))
-                .map(String::trim)
-                .sorted((o1, o2) -> ThreadLocalRandom.current().nextInt(-1, 2))
-                .
-                .limit(2)
-                .
     }
 
     public CategoryNode findNode(String path) {

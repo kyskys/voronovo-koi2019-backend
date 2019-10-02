@@ -1,11 +1,14 @@
 package voronovo.koi2019.generation.calculator;
 
+import lombok.Data;
+import voronovo.koi2019.generation.condition.CalculatorType;
 import voronovo.koi2019.generation.util.RegExpUtil;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+@Data
 public class JavaScriptCalculator implements Calculator {
 
     @Override
@@ -20,4 +23,7 @@ public class JavaScriptCalculator implements Calculator {
         }
         return "null";
     }
+
+    private final CalculatorType calculatorType;
+    private final boolean isInteger;
 }

@@ -48,7 +48,7 @@ public enum PreConditionType {
     public static PreCondition find(String condition) {
         return EnumSet.allOf(PreConditionType.class).stream().filter(value -> condition.contains(value.identifier)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"))
-                .getCondition(condition);
+                .getCondition(condition.trim());
     }
 
     public abstract int generateValue(String value);
