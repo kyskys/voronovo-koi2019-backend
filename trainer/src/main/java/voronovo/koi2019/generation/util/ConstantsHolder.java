@@ -13,4 +13,6 @@ public class ConstantsHolder {
     public static final String ADDITIONAL_SEPARATOR = "<>";
     public static final Integer DEFAULT_BATCH_SIZE = 15;
     public static final Integer DEFAULT_INCORRECT_ANSWERS = 3;
+    public static final String SIGN_REGEX = "[+-/*()]";
+    public static final String IS_INTEGER_REGEX = "-?\\d+(\\.\\d+)+";
 }

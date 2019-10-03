@@ -1,40 +1,31 @@
 package voronovo.koi2019.generation.test;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import voronovo.koi2019.entity.Test;
-import voronovo.koi2019.generation.api.AnswerGenerator;
 import voronovo.koi2019.generation.calculator.Calculator;
+import voronovo.koi2019.generation.condition.AnswerGenerator;
 import voronovo.koi2019.generation.condition.PostCondition;
 import voronovo.koi2019.generation.condition.PreCondition;
-import voronovo.koi2019.generation.condition.ConditionsParser;
 import voronovo.koi2019.generation.util.RegExpUtil;
 import voronovo.koi2019.generation.util.ConstantsHolder;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@RequiredArgsConstructor
+@Getter
 public class TestBuilder {
     private Map<String, Integer> variablesMap = new HashMap<>();
-    private List<PreCondition> preConditions;
-    private List<PostCondition> postConditions;
-    private String expression;
-    private Calculator calculator;
-    private AnswerGenerator answerGenerator;
+    private @NonNull String expression;
+    private @NonNull List<PreCondition> preConditions;
+    private @NonNull List<PostCondition> postConditions;
+    private @NonNull List<AnswerGenerator> answerGenerators;
+    private @NonNull Calculator calculator;
 
-    public TestBuilder(String sample, Calculator calculator, AnswerGenerator answerGenerator) {
-        String[] data = sample.split(ConstantsHolder.SEPARATOR);
-        this.expression = data[0].trim();
-        RegExpUtil.findAllUnique(expression, ConstantsHolder.VARIABLE_REGEX).forEach(value -> variablesMap.put(value, null));
-        this.preConditions = ConditionsParser.parsePre(data[1].trim());
-        this.postConditions = data.length == 3 ? ConditionsParser.parsePost(data[2].trim()) : null;
-        this.calculator = calculator;
-        this.answerGenerator = answerGenerator;
-    }
-
-    private void initVariables() {
+    public void initVariables() {
         for (PreCondition precondition : preConditions) {
             variablesMap.put(precondition.getTarget(), precondition.getPreconditionType().generateValue(precondition.getValue()));
         }
@@ -43,12 +34,13 @@ public class TestBuilder {
     public Test build(int incorrectAnswers) {
         String finalExpression = getFinalExpression();
         String answer = calculator.calculateExpression(finalExpression);
-        List<String> answers = answerGenerator.generateAnswers(answer, incorrectAnswers);
+        List<String> answers = generateAnswers(answer, incorrectAnswers);
         Test test = new Test(finalExpression, answers, answer);
-        if(this.postConditions != null) {
+        if (this.postConditions != null) {
             boolean needToRestart = this.postConditions
                     .stream()
-                    .map(postCondition -> postCondition.getPreconditionType().isValid(test))
+                    .peek(condition -> condition.getType().modify(test, condition, this))
+                    .map(condition -> condition.getType().isInvalid(test))
                     .reduce((b1, b2) -> b1 || b2)
                     .orElseThrow(() -> new IllegalArgumentException("wrong post conditions configuration"));
             return needToRestart ? build(incorrectAnswers) : test;
@@ -56,14 +48,36 @@ public class TestBuilder {
         return test;
     }
 
+    public List<String> generateAnswers(String answer, int incorrectAnswers) {
+        List<String> options = new ArrayList<>(Collections.nCopies(incorrectAnswers, answer));
+        IntStream.range(0, answerGenerators.size()).forEach(j -> {
+            Collections.shuffle(options);
+            IntStream.range(0, incorrectAnswers).forEach(i -> {
+                String option = options.get(i);
+                do {
+                    for (AnswerGenerator generator : answerGenerators) {
+                        option = generator.getType().apply(option, generator, calculator);
+                    }
+                } while (options.contains(option) || option.equals(answer));
+                options.set(i, option);
+            });
+        });
+        return options;
+    }
+
     public String getFinalExpression() {
         String result = expression;
         initVariables();
         result = RegExpUtil.handleSigns(result);
-        for (Map.Entry<String, Integer> entry: variablesMap.entrySet()) {
+        result = replaceVariables(result);
+        result = RegExpUtil.handleNegativeSigns(result);
+        return result;
+    }
+
+    public String replaceVariables(String result) {
+        for (Map.Entry<String, Integer> entry : variablesMap.entrySet()) {
             result = result.replaceAll("\\[" + entry.getKey() + "]", entry.getValue().toString());
         }
-        result = RegExpUtil.handleNegativeSigns(result);
         return result;
     }
 

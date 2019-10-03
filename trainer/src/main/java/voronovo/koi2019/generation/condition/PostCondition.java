@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class PostCondition {
-    private final PostConditionType preconditionType;
+    private final PostConditionType type;
+    private final String value;
 }

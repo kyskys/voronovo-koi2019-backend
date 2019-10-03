@@ -48,6 +48,17 @@ public enum AnswerGeneratorType {
             String[] typeAndFrequency = typeAndValue[0].split("=");
             return new AnswerGenerator(this, Integer.parseInt(typeAndFrequency[1]), null);
         }
+    },
+    POW("pow") {
+        @Override
+        public <T extends Calculator> String apply(String option, AnswerGenerator generator, Calculator calculator) {
+            return null;
+        }
+
+        @Override
+        public AnswerGenerator getAnswerGenerator(String value) {
+            return null;
+        }
     };
 
     public abstract <T extends Calculator> String apply(String option, AnswerGenerator generator, Calculator calculator);
