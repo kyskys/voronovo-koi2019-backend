@@ -1,4 +1,4 @@
-package voronovo.koi2019.rest;
+package voronovo.koi2019.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
-import static voronovo.koi2019.rest.TestController.CATEGORIES_URL_PART;
+import static voronovo.koi2019.controller.TestController.CATEGORIES_URL_PART;
 
 @RestController
 @RequestMapping(CATEGORIES_URL_PART)

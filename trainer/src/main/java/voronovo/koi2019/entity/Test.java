@@ -1,19 +1,21 @@
 package voronovo.koi2019.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.Type;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Test {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String expression;
     @ElementCollection
-    @CollectionTable(name = "answer", joinColumns = @JoinColumn(name = "test_id"))
+    @CollectionTable(name = "test_answer", joinColumns = @JoinColumn(name = "question_id"))
     private List<String> allOptions;
     private String correctAnswer;
 
