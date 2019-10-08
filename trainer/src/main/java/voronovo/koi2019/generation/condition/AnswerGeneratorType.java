@@ -6,13 +6,14 @@ import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public enum AnswerGeneratorType {
     ANSWER_INTERVAL("interval") {
         @Override
         public String apply(String option, AnswerGenerator generator, Calculator calculator) {
-            if(((JavaScriptCalculator) calculator).isInteger()) {//TODO: заменить на генерик?
+            if (((JavaScriptCalculator) calculator).isInteger()) {//TODO: заменить на генерик?
                 Integer toReturn = Integer.parseInt(option);
                 Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
                 return String.valueOf(toReturn - toMinus);
@@ -33,7 +34,7 @@ public enum AnswerGeneratorType {
     NEGATIVE("negative") {
         @Override
         public String apply(String option, AnswerGenerator generator, Calculator calculator) {
-            if(((JavaScriptCalculator) calculator).isInteger()) {
+            if (((JavaScriptCalculator) calculator).isInteger()) {
                 int toReturn = Integer.parseInt(option);
                 return String.valueOf(0 - toReturn);
             } else {
@@ -47,17 +48,6 @@ public enum AnswerGeneratorType {
             String[] typeAndValue = value.split(" ");
             String[] typeAndFrequency = typeAndValue[0].split("=");
             return new AnswerGenerator(this, Integer.parseInt(typeAndFrequency[1]), null);
-        }
-    },
-    POW("pow") {
-        @Override
-        public <T extends Calculator> String apply(String option, AnswerGenerator generator, Calculator calculator) {
-            return null;
-        }
-
-        @Override
-        public AnswerGenerator getAnswerGenerator(String value) {
-            return null;
         }
     };
 

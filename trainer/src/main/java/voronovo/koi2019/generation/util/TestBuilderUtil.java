@@ -5,6 +5,7 @@ import voronovo.koi2019.generation.condition.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,6 +52,15 @@ public class TestBuilderUtil {
         } catch (Exception e) {
             throw getException("answer generators", value, e);
         }
+    }
+
+    public static Integer getRandomVariable(Map<String, Integer> variablesMap, String answer) {
+        return variablesMap
+                .values()
+                .stream()
+                .skip((int) (Math.random() * variablesMap.size()))
+                .findFirst()
+                .get();
     }
 
     private static IllegalArgumentException getException(String message, String value, Exception e) {

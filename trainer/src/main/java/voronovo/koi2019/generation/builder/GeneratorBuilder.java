@@ -1,16 +1,10 @@
 package voronovo.koi2019.generation.builder;
 
 import org.springframework.stereotype.Component;
-import voronovo.koi2019.generation.calculator.Calculator;
-import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
-import voronovo.koi2019.generation.condition.*;
-import voronovo.koi2019.generation.test.TestBuilder;
-import voronovo.koi2019.generation.util.ConstantsHolder;
-import voronovo.koi2019.generation.util.RegExpUtil;
+import voronovo.koi2019.generation.test.DefaultTestBuilder;
 import voronovo.koi2019.generation.util.TestBuilderUtil;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -38,7 +32,7 @@ public class GeneratorBuilder {
             CategoryNode lastNode = findNode(path, rootNode);
             String[] sampleParameters = sample.split(SEPARATOR);
             try {
-                TestBuilder builder = new TestBuilder(
+                DefaultTestBuilder builder = new DefaultTestBuilder(
                         TestBuilderUtil.getGeneratorSample(sampleParameters[0]),
                         TestBuilderUtil.getPreConditions(sampleParameters[1]),
                         TestBuilderUtil.getPostConditions(sampleParameters[2]),

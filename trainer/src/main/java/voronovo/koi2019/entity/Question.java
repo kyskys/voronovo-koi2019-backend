@@ -22,7 +22,6 @@ public class Question {
     private String correctAnswer;
     private String image;
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
     @PrePersist

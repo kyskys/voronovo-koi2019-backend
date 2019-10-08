@@ -1,6 +1,7 @@
 package voronovo.koi2019.generation.test;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import voronovo.koi2019.entity.Test;
@@ -8,6 +9,7 @@ import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.generation.condition.AnswerGenerator;
 import voronovo.koi2019.generation.condition.PostCondition;
 import voronovo.koi2019.generation.condition.PreCondition;
+import voronovo.koi2019.generation.test.api.TestBuilder;
 import voronovo.koi2019.generation.util.RegExpUtil;
 import voronovo.koi2019.generation.util.ConstantsHolder;
 
@@ -16,8 +18,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
-public class TestBuilder {
+public class DefaultTestBuilder implements TestBuilder {
     private Map<String, Integer> variablesMap = new HashMap<>();
     private @NonNull String expression;
     private @NonNull List<PreCondition> preConditions;
@@ -31,9 +34,10 @@ public class TestBuilder {
         }
     }
 
+    @Override
     public Test build(int incorrectAnswers) {
         String finalExpression = getFinalExpression();
-        String answer = calculator.calculateExpression(finalExpression);
+        String answer = getAnswer(finalExpression);
         List<String> answers = generateAnswers(answer, incorrectAnswers);
         Test test = new Test(finalExpression, answers, answer);
         if (this.postConditions != null) {
@@ -48,6 +52,12 @@ public class TestBuilder {
         return test;
     }
 
+    @Override
+    public String getAnswer(String expression) {
+        return calculator.calculateExpression(expression);
+    }
+
+    @Override
     public List<String> generateAnswers(String answer, int incorrectAnswers) {
         List<String> options = new ArrayList<>(Collections.nCopies(incorrectAnswers, answer));
         IntStream.range(0, answerGenerators.size()).forEach(j -> {
@@ -65,6 +75,7 @@ public class TestBuilder {
         return options;
     }
 
+    @Override
     public String getFinalExpression() {
         String result = expression;
         initVariables();
@@ -81,6 +92,7 @@ public class TestBuilder {
         return result;
     }
 
+    @Override
     public List<Test> buildBatch(Integer amount, Integer incorrectAnswers) {
         return IntStream
                 .range(0, Optional.ofNullable(amount).orElse(ConstantsHolder.DEFAULT_BATCH_SIZE))

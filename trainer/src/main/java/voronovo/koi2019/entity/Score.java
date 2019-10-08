@@ -20,4 +20,9 @@ public class Score {
     private Date date;
     private String name;
     private String category;
+
+    @PrePersist
+    private void setCreationDate() {
+        this.date = this.date != null ? this.date : new Date();
+    }
 }

@@ -6,7 +6,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import voronovo.koi2019.entity.Test;
 import voronovo.koi2019.generation.builder.CategoryNode;
 import voronovo.koi2019.generation.builder.GeneratorBuilder;
-import voronovo.koi2019.generation.test.TestBuilder;
+import voronovo.koi2019.generation.test.DefaultTestBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,7 +28,7 @@ public class TestController {
     public List<Test> getGenerator(HttpServletRequest request,
                                    @RequestParam(value = "amount", required = false) Integer amount,
                                    @RequestParam(value = "incorrectAnswers", required = false) Integer incorrectAnswers) {
-        TestBuilder testBuilder = generatorBuilder.findNode(getGeneratorNodePath(request)).getGenerator();
+        DefaultTestBuilder testBuilder = generatorBuilder.findNode(getGeneratorNodePath(request)).getGenerator();
         return testBuilder.buildBatch(amount, incorrectAnswers);
     }
 

@@ -1,9 +1,7 @@
 package voronovo.koi2019.generation.condition;
 
 import voronovo.koi2019.entity.Test;
-import voronovo.koi2019.generation.test.TestBuilder;
-import voronovo.koi2019.generation.util.ConstantsHolder;
-import voronovo.koi2019.generation.util.RegExpUtil;
+import voronovo.koi2019.generation.test.DefaultTestBuilder;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -19,7 +17,7 @@ public enum PostConditionType {
         }
 
         @Override
-        public void modify(Test test, PostCondition condition, TestBuilder builder) {
+        public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
 
         }
 
@@ -35,7 +33,7 @@ public enum PostConditionType {
         }
 
         @Override
-        public void modify(Test test, PostCondition condition, TestBuilder builder) {
+        public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
             test.setAllOptions(test.getAllOptions().stream().map(option -> option.matches(IS_INTEGER_REGEX) ? option.split("\\.")[0] : option).collect(Collectors.toList()));
         }
 
@@ -51,7 +49,7 @@ public enum PostConditionType {
         }
 
         @Override
-        public void modify(Test test, PostCondition condition, TestBuilder builder) {
+        public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
             String[] patternParameters = condition.getValue().split(" ");
             String sample = builder.replaceVariables(patternParameters[1].replace("answer", test.getCorrectAnswer()));
             String correctAnswer = String.valueOf(builder.getVariablesMap().get(patternParameters[2]));
@@ -81,7 +79,7 @@ public enum PostConditionType {
 
     public abstract boolean isInvalid(Test test);
 
-    public abstract void modify(Test test, PostCondition condition, TestBuilder builder);
+    public abstract void modify(Test test, PostCondition condition, DefaultTestBuilder builder);
 
     public abstract PostCondition getCondition(String value);
 }
