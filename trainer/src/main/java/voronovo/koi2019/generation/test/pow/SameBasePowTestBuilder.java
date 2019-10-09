@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import voronovo.koi2019.generation.test.api.TestBuilderPart;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -16,10 +17,12 @@ public class SameBasePowTestBuilder extends AbstractPowBuilder implements TestBu
 
     @Override
     public String getFinalExpression() {
+        initVariables();
         String degree = getCalculator().calculateExpression(
                 getExpression().replaceFirst(pattern, "$3$4$5$7$8")
                         .replace("*", "+")
                         .replace("/", "-"));
+        getOptions().put("answer", Integer.valueOf(degree));
         return getExpression().replaceFirst(pattern, "$1$2") + "^" + degree;
     }
 
@@ -36,11 +39,9 @@ public class SameBasePowTestBuilder extends AbstractPowBuilder implements TestBu
     @Override
     public List<String> generateAnswers(String answer, int incorrectAnswers) {
         return IntStream.range(0, incorrectAnswers)
-                .mapToObj(i -> {
-                    return getExpression()
-                            .replaceFirst("[+-]?\\d+", getRandomVariable(answer).toString())
-                            .replaceFirst("[+-]?\\d+", getRandomVariable(answer).toString());
-                })
+                .mapToObj(i ->
+
+                )
                 .collect(Collectors.toList());
     }
 }
