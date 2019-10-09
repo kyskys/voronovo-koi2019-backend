@@ -34,6 +34,6 @@ public class CategoryNode {
 
     @JsonProperty("isGenerator")
     public boolean isGenerator() {
-        return Objects.isNull(getGenerator());
+        return !Objects.isNull(getGenerator());
     }
 }

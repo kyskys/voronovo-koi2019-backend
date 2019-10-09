@@ -54,15 +54,6 @@ public class TestBuilderUtil {
         }
     }
 
-    public static Integer getRandomVariable(Map<String, Integer> variablesMap, String answer) {
-        return variablesMap
-                .values()
-                .stream()
-                .skip((int) (Math.random() * variablesMap.size()))
-                .findFirst()
-                .get();
-    }
-
     private static IllegalArgumentException getException(String message, String value, Exception e) {
         return new IllegalArgumentException("error while parsing " + message + " \"" + value + "\"", e);
     }

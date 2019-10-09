@@ -11,37 +11,28 @@ import java.util.stream.IntStream;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SameBasePowTestBuilder extends AbstractPowBuilder implements TestBuilderPart {
+public class SameBasePowTestBuilder extends AbstractPowBuilder {
     private String pattern = "([+-]?)(\\d+)\\^([+-]?)(\\d+)([\\/*]?)([+-]?)(\\d+)\\^([+-]?)(\\d+)";
     private String sample = "[var1]^[var2]/*[var1]^[var3]";
 
     @Override
-    public String getFinalExpression() {
-        initVariables();
+    protected void updateOptions() { //добавляем пару неверных в мн-во опций
+        getOptions().put("answer2", getRandomVariable() + getRandomVariable());
+        getOptions().put("answer3", getRandomVariable() - getRandomVariable());
+    }
+
+    @Override
+    protected String generateOption() {
+        return getRandomVariable() + "^" + getRandomVariable();
+    }
+
+    @Override
+    protected String handleExpression(String expression) {
         String degree = getCalculator().calculateExpression(
-                getExpression().replaceFirst(pattern, "$3$4$5$7$8")
+                 expression.replaceFirst(getPattern(), "$3$4$5$7$8")
                         .replace("*", "+")
                         .replace("/", "-"));
         getOptions().put("answer", Integer.valueOf(degree));
-        return getExpression().replaceFirst(pattern, "$1$2") + "^" + degree;
-    }
-
-//    @Override
-//    public boolean isApplicable() {
-//        if (getExpression().matches(pattern)) {
-//            String firstNumber = getExpression().replaceFirst(pattern, "$1$2");
-//            String secondNumber = getExpression().replaceFirst(pattern, "$6$7");
-//            return firstNumber.equals(secondNumber);
-//        }
-//        return false;
-//    }
-
-    @Override
-    public List<String> generateAnswers(String answer, int incorrectAnswers) {
-        return IntStream.range(0, incorrectAnswers)
-                .mapToObj(i ->
-
-                )
-                .collect(Collectors.toList());
+        return expression.replaceFirst(getPattern(), "$1$2") + "^" + degree;
     }
 }

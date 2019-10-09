@@ -15,8 +15,8 @@ import java.util.stream.IntStream;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PowInPowTestBuilder extends AbstractPowBuilder implements TestBuilderPart {
-    private String pattern = "(([+-]?)(\\d+)\\^([+-]?)(\\d+))\\^([+-]?)(\\d+)";
+public class PowInPowTestBuilder extends AbstractPowBuilder {
+    private String pattern = "\\(([+-]?)(\\d+)\\^([+-]?)(\\d+)\\)\\^([+-]?)(\\d+)";
     private String sample = "([var1]^[var2])^[var3]";
 
 //    private List<String> incorrectOptions = Arrays.asList(
@@ -27,22 +27,22 @@ public class PowInPowTestBuilder extends AbstractPowBuilder implements TestBuild
 //    );
 
     @Override
-    public String getFinalExpression() {
-        initVariables(); //инитим переменные из sample и preconditions
-        String result = replaceVariables(getExpression()); //заменяем
-        String degree = getCalculator().calculateExpression(
-                result.replaceFirst(pattern, "$3$4*$5$6") //[var2]*[var3]
-                        .replace("*+", "*")); //1*+2 -> 1*2
-        getOptions().put("answer", Integer.valueOf(degree)); //добавляем правильную степень и пару неверных в мн-во переменных
+    protected void updateOptions() {
         getOptions().put("answer2", getRandomVariable() + getRandomVariable());
         getOptions().put("answer3", getRandomVariable() - getRandomVariable());
-        return result.replaceFirst(pattern, "$1") + "^" + degree;
     }
 
     @Override
-    public List<String> generateAnswers(String answer, int incorrectAnswers) {
-        return IntStream.range(0, incorrectAnswers)
-                .mapToObj(i -> getRandomVariable() + "^" + getRandomVariable())
-                .collect(Collectors.toList());
+    protected String generateOption() {
+        return getRandomVariable() + "^" + getRandomVariable();
+    }
+
+    @Override
+    protected String handleExpression(String expression) {
+        String degree = getCalculator().calculateExpression(
+                expression.replaceFirst(pattern, "$3$4*$5$6") //[var2]*[var3]
+                        .replace("*+", "*")); //1*+2 -> 1*2
+        getOptions().put("answer", Integer.valueOf(degree));
+        return expression.replaceFirst(pattern, "$1") + "^" + degree;
     }
 }
