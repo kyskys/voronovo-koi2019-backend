@@ -1,7 +1,7 @@
 package voronovo.koi2019.generation.calculator;
 
 import lombok.Data;
-import voronovo.koi2019.generation.condition.CalculatorType;
+import voronovo.koi2019.generation.type.CalculatorType;
 import voronovo.koi2019.generation.util.RegExpUtil;
 
 import javax.script.ScriptEngine;

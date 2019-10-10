@@ -3,63 +3,44 @@ package voronovo.koi2019.generation.test.pow;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
-import voronovo.koi2019.generation.condition.CalculatorType;
-import voronovo.koi2019.generation.condition.PreCondition;
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
+import voronovo.koi2019.generation.test.api.OptionGenerator;
 import voronovo.koi2019.generation.test.api.TestBuilderPart;
 import voronovo.koi2019.generation.util.RegExpUtil;
+import voronovo.koi2019.generation.util.TestBuilderUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
-public abstract class AbstractPowBuilder extends DefaultTestBuilder implements TestBuilderPart {
+public abstract class AbstractPowBuilder extends DefaultTestBuilder implements TestBuilderPart, OptionGenerator {
     protected Map<String, Integer> options;
 
     protected abstract void updateOptions();
 
-    protected abstract String generateOption();
-
     protected abstract String handleExpression(String expression);
 
-    public AbstractPowBuilder(String sample, List<PreCondition> preConditions) {
-        super(sample,
-                preConditions,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new JavaScriptCalculator(CalculatorType.JAVASCRIPT, true));
-    }
+    public abstract String getSample();
 
     @Override
     public String getFinalExpression() {
         initVariables();
+        this.options = new HashMap<>(getVariablesMap());
         updateOptions();
-        String result = RegExpUtil.handleSigns(getExpression());
+        String result = RegExpUtil.handleSigns(getSample());
         result = replaceVariables(result);
-        result = RegExpUtil.handleNegativeSigns(result);
-        return handleExpression(result);
+        //result = RegExpUtil.handleNegativeSigns(result);
+        return result;
     }
 
     @Override
-    public List<String> generateAnswers(String answer, int incorrectAnswers) {
-        return IntStream.range(0, incorrectAnswers)
-                .mapToObj(i -> generateOption())
-                .collect(Collectors.toList());
+    public String getAnswer(String expression) {
+        return handleExpression(expression);
     }
 
     protected Integer getRandomVariable() {
-        return options
-                .values()
-                .stream()
-                .skip((int) (Math.random() * getVariablesMap().size()))
-                .findFirst()
-                .get();
+        return TestBuilderUtil.getRandomElement(options.values());
     }
 }

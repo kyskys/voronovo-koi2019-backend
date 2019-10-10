@@ -1,6 +1,7 @@
-package voronovo.koi2019.generation.condition;
+package voronovo.koi2019.condition;
 
 import lombok.Data;
+import voronovo.koi2019.generation.type.PreConditionType;
 
 @Data
 public class PreCondition {

@@ -7,9 +7,11 @@ import static voronovo.koi2019.generation.util.RegExpUtil.handleSigns;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SameDegreePowTestBuilder extends AbstractPowBuilder {
+public class SameDegreeRevertPowTestBuilder extends AbstractPowBuilder {
     private String pattern = "([+-]?)(\\d+)\\^([+-]?)(\\d+)([\\/*]?)([+-]?)(\\d+)\\^([+-]?)(\\d+)";
     private String sample = "[var1]^[var2]/*[var3]^[var2]";
+    //2^6/2^3
+    //(6/3)^2
 
     @Override
     protected void updateOptions() {
@@ -19,7 +21,8 @@ public class SameDegreePowTestBuilder extends AbstractPowBuilder {
 
     @Override
     public String generateOption() {
-        return "(" + getRandomVariable() + handleSigns("/*") + getRandomVariable() + ")^" + getRandomVariable();
+        Integer degree = getRandomVariable();
+        return getRandomVariable() + "^" + degree + handleSigns("*/") + getRandomVariable() + "^" + degree;
     }
 
     @Override
@@ -28,12 +31,15 @@ public class SameDegreePowTestBuilder extends AbstractPowBuilder {
         if (base.contains("/")) { //если присутствует деление
             String newVariable = getCalculator().calculateExpression(base.replace("/", "*")); //заменяем на var1*var2 и вычисляем
             base = expression.replaceFirst(pattern, "$1$2"); //для записи ответа используем var1
-            setExpression(expression.replaceFirst("[+-]?\\d+", newVariable)); //в итоговом выражении заменяем var1 на результат умножения
+            setExpression(expression.replaceFirst(getPattern(),  base + "^$8$9"));
             getOptions().put("answer", Integer.valueOf(newVariable)); //сохраняем
+            return expression.replaceFirst("[+-]?\\d+", newVariable);
+
         } else { //если присутствует умножение - ничего не делаем
             base = getCalculator().calculateExpression(base);
             getOptions().put("answer", Integer.valueOf(base));
+            setExpression(expression.replaceFirst(getPattern(), base + "^$8$9"));
+            return expression;
         }
-        return expression.replaceFirst(getPattern(),  base + "^$8$9");
     }
 }

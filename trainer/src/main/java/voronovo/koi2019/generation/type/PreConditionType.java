@@ -1,12 +1,13 @@
-package voronovo.koi2019.generation.condition;
+package voronovo.koi2019.generation.type;
 
-import java.util.Arrays;
+import voronovo.koi2019.condition.PreCondition;
+
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 public enum PreConditionType {
-    EQ("==") {
+    EQUAL("==") {
         @Override
         public int generateValue(String value) {
             return Integer.parseInt(value);
@@ -16,6 +17,17 @@ public enum PreConditionType {
         public PreCondition getCondition(String value) {
             String[] conditionParts = value.trim().split(" ");
             return new PreCondition(conditionParts[0], this, conditionParts[2]);
+        }
+    },
+    NOT_EQUAL("!=") {
+        @Override
+        public int generateValue(String value) {
+            return 0;
+        }
+
+        @Override
+        public PreCondition getCondition(String value) {
+            return null;
         }
     },
     BETWEEN("between") {
@@ -47,7 +59,7 @@ public enum PreConditionType {
 
     public static PreCondition find(String condition) {
         return EnumSet.allOf(PreConditionType.class).stream().filter(value -> condition.contains(value.identifier)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier"))
+                .orElseThrow(() -> new IllegalArgumentException("invalid condition identifier for " + condition))
                 .getCondition(condition.trim());
     }
 

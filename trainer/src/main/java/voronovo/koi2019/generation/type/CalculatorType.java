@@ -1,4 +1,4 @@
-package voronovo.koi2019.generation.condition;
+package voronovo.koi2019.generation.type;
 
 import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
@@ -20,10 +20,10 @@ public enum CalculatorType {
         this.identifier = identifier;
     }
 
-    public static Calculator find(String condition) {
-        return EnumSet.allOf(CalculatorType.class).stream().filter(value -> condition.contains(value.identifier)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("invalid answer generator identifier"))
-                .getCalculator(condition.trim());
+    public static Calculator find(String calculator) {
+        return EnumSet.allOf(CalculatorType.class).stream().filter(value -> calculator.contains(value.identifier)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("invalid calculator identifier for " + calculator))
+                .getCalculator(calculator.trim());
     }
 
     public abstract Calculator getCalculator(String value);

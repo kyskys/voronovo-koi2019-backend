@@ -1,14 +1,10 @@
 package voronovo.koi2019.generation.test;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import voronovo.koi2019.entity.Test;
 import voronovo.koi2019.generation.calculator.Calculator;
-import voronovo.koi2019.generation.condition.AnswerGenerator;
-import voronovo.koi2019.generation.condition.PostCondition;
-import voronovo.koi2019.generation.condition.PreCondition;
+import voronovo.koi2019.condition.PostCondition;
+import voronovo.koi2019.condition.PreCondition;
 import voronovo.koi2019.generation.test.api.TestBuilder;
 import voronovo.koi2019.generation.util.RegExpUtil;
 import voronovo.koi2019.generation.util.ConstantsHolder;
@@ -17,12 +13,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 @NoArgsConstructor
-@Getter
-public class DefaultTestBuilder implements TestBuilder {
+@Data
+public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuilder {
     private Map<String, Integer> variablesMap = new HashMap<>();
-    private @NonNull String expression;
+    private String expression;
+    private @NonNull String sample;
     private @NonNull List<PreCondition> preConditions;
     private @NonNull List<PostCondition> postConditions;
     private @NonNull List<AnswerGenerator> answerGenerators;
@@ -36,10 +34,10 @@ public class DefaultTestBuilder implements TestBuilder {
 
     @Override
     public Test build(int incorrectAnswers) {
-        String finalExpression = getFinalExpression();
-        String answer = getAnswer(finalExpression);
+        setExpression(getFinalExpression());
+        String answer = getAnswer(getExpression());
         List<String> answers = generateAnswers(answer, incorrectAnswers);
-        Test test = new Test(finalExpression, answers, answer);
+        Test test = new Test(expression, answers, answer);
         if (this.postConditions != null) {
             boolean needToRestart = this.postConditions
                     .stream()
@@ -66,7 +64,7 @@ public class DefaultTestBuilder implements TestBuilder {
                 String option = options.get(i);
                 do {
                     for (AnswerGenerator generator : answerGenerators) {
-                        option = generator.getType().apply(option, generator, calculator);
+                        option = generator.getType().apply(option, generator, this);
                     }
                 } while (options.contains(option) || option.equals(answer));
                 options.set(i, option);
@@ -77,7 +75,7 @@ public class DefaultTestBuilder implements TestBuilder {
 
     @Override
     public String getFinalExpression() {
-        String result = expression;
+        String result = sample;
         initVariables();
         result = RegExpUtil.handleSigns(result);
         result = replaceVariables(result);

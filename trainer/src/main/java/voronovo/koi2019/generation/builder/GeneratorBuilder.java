@@ -1,7 +1,9 @@
 package voronovo.koi2019.generation.builder;
 
+import org.aspectj.weaver.ast.Test;
 import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
+import voronovo.koi2019.generation.test.MultiTestBuilder;
 import voronovo.koi2019.generation.util.TestBuilderUtil;
 
 import javax.annotation.PostConstruct;
@@ -30,18 +32,8 @@ public class GeneratorBuilder {
         rootNode = new CategoryNode();
         generatorSamples.getSamples().forEach((path, sample) -> {
             CategoryNode lastNode = findNode(path, rootNode);
-            String[] sampleParameters = sample.split(SEPARATOR);
-            try {
-                DefaultTestBuilder builder = new DefaultTestBuilder(
-                        TestBuilderUtil.getGeneratorSample(sampleParameters[0]),
-                        TestBuilderUtil.getPreConditions(sampleParameters[1]),
-                        TestBuilderUtil.getPostConditions(sampleParameters[2]),
-                        TestBuilderUtil.getAnswerGenerators(sampleParameters[3]),
-                        TestBuilderUtil.getCalculator(sampleParameters[4]));
-                lastNode.setGenerator(builder);
-            } catch (Exception e) {
-                throw new IllegalArgumentException("error while creating test builder, path \"" + path + "\"", e);
-            }
+            MultiTestBuilder multiBuilder = TestBuilderUtil.getMultiBuilder(sample);
+            lastNode.setGenerator(multiBuilder);
         });
     }
 
