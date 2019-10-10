@@ -15,7 +15,7 @@ public enum TestBuilderType {
         public TestBuilder getBuilder(String value) {
             String[] sampleParameters = value.split(SEPARATOR);
             return new DefaultTestBuilder(
-                    TestBuilderUtil.getGeneratorSample(sampleParameters[0]),
+                    TestBuilderUtil.getGeneratorSample(sampleParameters[0].split(" ")[1]),
                     TestBuilderUtil.getPreConditions(sampleParameters[1]),
                     TestBuilderUtil.getPostConditions(sampleParameters[2]),
                     TestBuilderUtil.getAnswerGenerators(sampleParameters[3]),
