@@ -17,7 +17,7 @@ public class NegativeDegreeRevertPowTestBuilder extends AbstractPowBuilder {
 
     @Override
     public String generateOption() {
-        return getRandomMinus() + getRandomVariable() + "^" + getRandomMinus() + getRandomVariable();
+        return getRandomVariable() + "^" + getRandomVariable();
     }
 
     @Override
