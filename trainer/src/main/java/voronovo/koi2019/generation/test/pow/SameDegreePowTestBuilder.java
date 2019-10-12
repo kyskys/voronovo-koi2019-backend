@@ -2,12 +2,13 @@ package voronovo.koi2019.generation.test.pow;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;
 
 import static voronovo.koi2019.generation.util.RegExpUtil.handleSigns;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SameDegreePowTestBuilder extends AbstractPowBuilder {
+public class SameDegreePowTestBuilder extends AbstractCodeWrittenBuilder {
     private String pattern = "([+-]?)(\\d+)\\^([+-]?)(\\d+)([\\/*]?)([+-]?)(\\d+)\\^([+-]?)(\\d+)";
     private String sample = "[var1]^[var2]/*[var3]^[var2]";
 
@@ -18,7 +19,7 @@ public class SameDegreePowTestBuilder extends AbstractPowBuilder {
     }
 
     @Override
-    public String generateOption() {
+    public String generateOption(String option, String generatorValue) {
         return "(" + getRandomVariable() + handleSigns("/*") + getRandomVariable() + ")^" + getRandomVariable();
     }
 
@@ -29,10 +30,10 @@ public class SameDegreePowTestBuilder extends AbstractPowBuilder {
             String newVariable = getCalculator().calculateExpression(base.replace("/", "*")); //заменяем на var1*var2 и вычисляем
             base = expression.replaceFirst(pattern, "$1$2"); //для записи ответа используем var1
             setExpression(expression.replaceFirst("[+-]?\\d+", newVariable)); //в итоговом выражении заменяем var1 на результат умножения
-            getOptions().put("answer", Integer.valueOf(newVariable)); //сохраняем
+            getOptions().put("answer", newVariable); //сохраняем
         } else { //если присутствует умножение - ничего не делаем
             base = getCalculator().calculateExpression(base);
-            getOptions().put("answer", Integer.valueOf(base));
+            getOptions().put("answer", base);
         }
         return expression.replaceFirst(getPattern(),  base + "^$8$9");
     }

@@ -4,8 +4,8 @@ import voronovo.koi2019.condition.PostCondition;
 import voronovo.koi2019.condition.PreCondition;
 import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
+import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;
 import voronovo.koi2019.generation.test.AnswerGenerator;
-import voronovo.koi2019.generation.test.pow.AbstractPowBuilder;
 import voronovo.koi2019.generation.type.*;
 import voronovo.koi2019.generation.test.MultiTestBuilder;
 
@@ -51,13 +51,13 @@ public class TestBuilderUtil {
         }
     }
 
-    public static AbstractPowBuilder getPowBuilder(Class<? extends AbstractPowBuilder> clazz, String preConditions, String postConditions) {
+    public static AbstractCodeWrittenBuilder getPowBuilder(Class<? extends AbstractCodeWrittenBuilder> clazz, String preConditions, String postConditions) {
         try {
-            AbstractPowBuilder builder = clazz.newInstance();
+            AbstractCodeWrittenBuilder builder = clazz.newInstance();
             builder.setSample(TestBuilderUtil.getGeneratorSample(builder.getSample()));
             builder.setPreConditions(TestBuilderUtil.getPreConditions(preConditions));
             builder.setPostConditions(TestBuilderUtil.getPostConditions(postConditions));
-            builder.setAnswerGenerators(TestBuilderUtil.getAnswerGenerators("pattern"));
+            builder.setAnswerGenerators(TestBuilderUtil.getAnswerGenerators("modify=0 0"));
             builder.setCalculator(new JavaScriptCalculator(CalculatorType.JAVASCRIPT, true));
             return builder;
         } catch (InstantiationException | IllegalAccessException e) {
@@ -81,6 +81,10 @@ public class TestBuilderUtil {
                 .skip((int) (Math.random() * collection.size()))
                 .findFirst()
                 .get();
+    }
+
+    public static String abs(String str) {
+        return str.replace("-", "");
     }
 
     public static MultiTestBuilder getMultiBuilder(String sample) {

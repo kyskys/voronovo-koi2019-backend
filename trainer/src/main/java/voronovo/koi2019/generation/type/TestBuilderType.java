@@ -2,7 +2,6 @@ package voronovo.koi2019.generation.type;
 
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
 import voronovo.koi2019.generation.test.api.TestBuilder;
-import voronovo.koi2019.generation.test.pow.AbstractPowBuilder;
 import voronovo.koi2019.generation.util.TestBuilderUtil;
 
 import java.util.EnumSet;

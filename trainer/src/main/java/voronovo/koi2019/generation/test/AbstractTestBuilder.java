@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public abstract class AbstractTestBuilder implements TestBuilder {
 
-    public abstract String getFinalExpression();
+    public abstract String getFinalExpression(String sample);
 
     public abstract List<String> generateAnswers(String answer, int incorrectAnswers);
 

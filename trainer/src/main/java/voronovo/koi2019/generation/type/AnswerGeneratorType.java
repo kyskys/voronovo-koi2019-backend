@@ -49,18 +49,20 @@ public enum AnswerGeneratorType {
             return new AnswerGenerator(this, Integer.parseInt(typeAndFrequency[1]), null);
         }
     },
-    PATTERN("pattern") {
+    PATTERN("modify") {
         @Override
         public <T extends Calculator> String apply(String option, AnswerGenerator generator, DefaultTestBuilder builder) {
             if(builder instanceof OptionGenerator) {
-                return ((OptionGenerator) builder).generateOption();
+                return builder.generateOption(option, generator.getValue());
             }
             return option;
         }
 
         @Override
         public AnswerGenerator getAnswerGenerator(String value) {
-            return new AnswerGenerator(this, 0, null);
+            String[] typeAndValue = value.split(" ");
+            String[] typeAndFrequency = typeAndValue[0].split("=");
+            return new AnswerGenerator(this, Integer.parseInt(typeAndFrequency[1]), typeAndValue[1]);
         }
     };
 

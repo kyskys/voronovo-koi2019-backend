@@ -1,6 +1,7 @@
 package voronovo.koi2019.generation.type;
 
 import voronovo.koi2019.condition.PreCondition;
+import voronovo.koi2019.generation.test.DefaultTestBuilder;
 
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,8 +10,8 @@ import java.util.stream.Stream;
 public enum PreConditionType {
     EQUAL("==") {
         @Override
-        public int generateValue(String value) {
-            return Integer.parseInt(value);
+        public String generateValue(String value, DefaultTestBuilder builder) {
+           return builder.getCalculator().calculateExpression(builder.getFinalExpression(value));
         }
 
         @Override
@@ -21,8 +22,8 @@ public enum PreConditionType {
     },
     NOT_EQUAL("!=") {
         @Override
-        public int generateValue(String value) {
-            return 0;
+        public String generateValue(String value, DefaultTestBuilder builder) {
+            return "0";
         }
 
         @Override
@@ -32,7 +33,7 @@ public enum PreConditionType {
     },
     BETWEEN("between") {
         @Override
-        public int generateValue(String value) {
+        public String generateValue(String value, DefaultTestBuilder builder) {
             String interval = Stream
                     .of(value.split("and"))
                     .sorted((o1, o2) -> ThreadLocalRandom.current().nextInt(-1, 2))
@@ -41,7 +42,7 @@ public enum PreConditionType {
             String[] split = interval.split(";");
             int min = Integer.parseInt(split[0].trim());
             int max = Integer.parseInt(split[1].trim());
-            return (int) Math.round(Math.random() * (max - min) + min);
+            return String.valueOf(Math.round(Math.random() * (max - min) + min));
         }
 
         @Override
@@ -63,6 +64,6 @@ public enum PreConditionType {
                 .getCondition(condition.trim());
     }
 
-    public abstract int generateValue(String value);
+    public abstract String generateValue(String value, DefaultTestBuilder builder);
     public abstract PreCondition getCondition(String value);
 }

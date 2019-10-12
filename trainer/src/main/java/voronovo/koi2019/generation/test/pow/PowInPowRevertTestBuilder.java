@@ -2,10 +2,11 @@ package voronovo.koi2019.generation.test.pow;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PowInPowRevertTestBuilder extends AbstractPowBuilder {
+public class PowInPowRevertTestBuilder extends AbstractCodeWrittenBuilder {
     private String pattern = "\\(([+-]?)(\\d+)\\^([+-]?)(\\d+)\\)\\^([+-]?)(\\d+)";
     private String sample = "([var1]^[var2])^[var3]";
 
@@ -16,7 +17,7 @@ public class PowInPowRevertTestBuilder extends AbstractPowBuilder {
     }
 
     @Override
-    public String generateOption() {
+    public String generateOption(String option, String generatorValue) {
         return "(" + getRandomVariable() + "^" + getRandomVariable() + ")^" + getRandomVariable();
     }
 
@@ -25,7 +26,7 @@ public class PowInPowRevertTestBuilder extends AbstractPowBuilder {
         String degree = getCalculator().calculateExpression(
                 expression.replaceFirst(pattern, "$3$4*$5$6") //[var2]*[var3]
                         .replace("*+", "*")); //1*+2 -> 1*2
-        getOptions().put("answer", Integer.valueOf(degree));
+        getOptions().put("answer", degree);
         setExpression(expression.replaceFirst(pattern, "$1$2") + "^" + degree);
         return expression;
     }

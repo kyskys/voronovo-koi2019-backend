@@ -2,12 +2,13 @@ package voronovo.koi2019.generation.test.pow;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;
 
-import static voronovo.koi2019.generation.util.RegExpUtil.handleSigns;
+import static voronovo.koi2019.generation.util.TestBuilderUtil.abs;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class NegativeDegreePowTestBuilder extends AbstractPowBuilder {
+public class NegativeDegreePowTestBuilder extends AbstractCodeWrittenBuilder {
     private String pattern = "([+-]?)(\\d+)\\^([+-]?)(\\d+)";
     private String sample = "[var1]^[var2]";
 
@@ -18,8 +19,8 @@ public class NegativeDegreePowTestBuilder extends AbstractPowBuilder {
     }
 
     @Override
-    public String generateOption() {
-        return "1/(" + getRandomMinus() + Math.abs(getRandomVariable()) + "^" + getRandomMinus() + Math.abs(getRandomVariable()) + ")";
+    public String generateOption(String option, String generatorValue) {
+        return "1/(" + getRandomMinus() + abs(getRandomVariable()).replace("-", "") + "^" + getRandomMinus() + abs(getRandomVariable()) + ")";
     }
 
     @Override

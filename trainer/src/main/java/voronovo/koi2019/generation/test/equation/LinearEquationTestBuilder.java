@@ -1,4 +1,4 @@
-package voronovo.koi2019.generation.test.pow;
+package voronovo.koi2019.generation.test.equation;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -6,9 +6,9 @@ import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SameBasePowTestBuilder extends AbstractCodeWrittenBuilder {
-    private String pattern = "([+-]?)(\\d+)\\^([+-]?)(\\d+)([\\/*]?)([+-]?)(\\d+)\\^([+-]?)(\\d+)";
-    private String sample = "[var1]^[var2]/*[var1]^[var3]";
+public class LinearEquationTestBuilder extends AbstractCodeWrittenBuilder {
+    private String pattern = "\\(([+-]?)(\\d+)\\^([+-]?)(\\d+)\\)\\^([+-]?)(\\d+)";
+    private String sample = "[var1]^[var3]";
 
     @Override
     protected void updateOptions() {
@@ -24,10 +24,9 @@ public class SameBasePowTestBuilder extends AbstractCodeWrittenBuilder {
     @Override
     protected String handleExpression(String expression) {
         String degree = getCalculator().calculateExpression(
-                 expression.replaceFirst(getPattern(), "$3$4$5$8$9")
-                        .replace("*", "+")
-                        .replace("/", "-"));
+                expression.replaceFirst(pattern, "$3$4*$5$6") //[var2]*[var3]
+                        .replace("*+", "*")); //1*+2 -> 1*2
         getOptions().put("answer", degree);
-        return expression.replaceFirst(getPattern(), "$1$2") + "^" + degree;
+        return expression.replaceFirst(pattern, "$1$2") + "^" + degree;
     }
 }

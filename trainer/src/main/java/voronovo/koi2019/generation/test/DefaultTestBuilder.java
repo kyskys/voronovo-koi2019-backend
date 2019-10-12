@@ -5,6 +5,7 @@ import voronovo.koi2019.entity.Test;
 import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.condition.PostCondition;
 import voronovo.koi2019.condition.PreCondition;
+import voronovo.koi2019.generation.test.api.OptionGenerator;
 import voronovo.koi2019.generation.test.api.TestBuilder;
 import voronovo.koi2019.generation.util.RegExpUtil;
 import voronovo.koi2019.generation.util.ConstantsHolder;
@@ -17,8 +18,8 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Data
-public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuilder {
-    private Map<String, Integer> variablesMap = new HashMap<>();
+public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuilder, OptionGenerator {
+    private Map<String, String> variablesMap = new HashMap<>();
     private String expression;
     private @NonNull String sample;
     private @NonNull List<PreCondition> preConditions;
@@ -28,13 +29,14 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
 
     public void initVariables() {
         for (PreCondition precondition : preConditions) {
-            variablesMap.put(precondition.getTarget(), precondition.getPreconditionType().generateValue(precondition.getValue()));
+            variablesMap.put(precondition.getTarget(), precondition.getPreconditionType().generateValue(precondition.getValue(), this));
         }
     }
 
     @Override
     public Test build(int incorrectAnswers) {
-        setExpression(getFinalExpression());
+        initVariables();
+        setExpression(getFinalExpression(getSample()));
         String answer = getAnswer(getExpression());
         List<String> answers = generateAnswers(answer, incorrectAnswers);
         Test test = new Test(expression, answers, answer);
@@ -74,9 +76,8 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
     }
 
     @Override
-    public String getFinalExpression() {
+    public String getFinalExpression(String sample) {
         String result = sample;
-        initVariables();
         result = RegExpUtil.handleSigns(result);
         result = replaceVariables(result);
         result = RegExpUtil.handleNegativeSigns(result);
@@ -84,7 +85,7 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
     }
 
     public String replaceVariables(String result) {
-        for (Map.Entry<String, Integer> entry : variablesMap.entrySet()) {
+        for (Map.Entry<String, String> entry : variablesMap.entrySet()) {
             result = result.replaceAll("\\[" + entry.getKey() + "]", entry.getValue().toString());
         }
         return result;
@@ -96,5 +97,11 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
                 .range(0, Optional.ofNullable(amount).orElse(ConstantsHolder.DEFAULT_BATCH_SIZE))
                 .mapToObj(i -> build(Optional.ofNullable(incorrectAnswers).orElse(ConstantsHolder.DEFAULT_INCORRECT_ANSWERS)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String generateOption(String option, String generatorValue) {
+        option = generatorValue.replace("[option]", option);
+        return getAnswer(getFinalExpression(option));
     }
 }

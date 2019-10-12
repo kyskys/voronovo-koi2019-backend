@@ -1,4 +1,4 @@
-package voronovo.koi2019.generation.test.pow;
+package voronovo.koi2019.generation.test;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,8 +15,8 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
-public abstract class AbstractPowBuilder extends DefaultTestBuilder implements TestBuilderPart, OptionGenerator {
-    protected Map<String, Integer> options;
+public abstract class AbstractCodeWrittenBuilder extends DefaultTestBuilder implements TestBuilderPart, OptionGenerator {
+    protected Map<String, String> options;
 
     protected abstract void updateOptions();
 
@@ -25,11 +25,11 @@ public abstract class AbstractPowBuilder extends DefaultTestBuilder implements T
     public abstract String getSample();
 
     @Override
-    public String getFinalExpression() {
+    public String getFinalExpression(String sample) {
         initVariables();
         this.options = new HashMap<>(getVariablesMap());
         updateOptions();
-        String result = RegExpUtil.handleSigns(getSample());
+        String result = RegExpUtil.handleSigns(sample);
         result = replaceVariables(result);
         //result = RegExpUtil.handleNegativeSigns(result);
         return result;
@@ -40,7 +40,7 @@ public abstract class AbstractPowBuilder extends DefaultTestBuilder implements T
         return handleExpression(expression);
     }
 
-    protected Integer getRandomVariable() {
+    protected String getRandomVariable() {
         return TestBuilderUtil.getRandomElement(options.values());
     }
 }

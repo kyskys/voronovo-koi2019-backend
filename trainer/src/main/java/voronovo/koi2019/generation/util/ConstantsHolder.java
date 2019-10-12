@@ -14,6 +14,8 @@ public class ConstantsHolder {
      */
     public static final String VARIABLE_REGEX = "(?<=\\[)var[\\d]+(?=\\])";
     public static final String SEPARATOR = "\\|";
+    public static final String NUMBER_REGEX = "([+-]?\\d+)";
+    public static final String DOUBLE_REGEX = "([+-]?\\d+\\.\\d+)";
     public static final String ADDITIONAL_SEPARATOR = "<>";
     public static final String BUILDERS_SEPARATOR = "\\\\";
     public static final Integer DEFAULT_BATCH_SIZE = 15;

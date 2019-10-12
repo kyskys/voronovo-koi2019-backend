@@ -2,10 +2,11 @@ package voronovo.koi2019.generation.test.pow;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class NegativeDegreeRevertPowTestBuilder extends AbstractPowBuilder {
+public class NegativeDegreeRevertPowTestBuilder extends AbstractCodeWrittenBuilder {
     private String pattern = "1/\\(([+-]?)(\\d+)\\^([+-]?)(\\d+)\\)";
     private String sample = "1/([var1]^[var2])";
 
@@ -16,7 +17,7 @@ public class NegativeDegreeRevertPowTestBuilder extends AbstractPowBuilder {
     }
 
     @Override
-    public String generateOption() {
+    public String generateOption(String option, String generatorValue) {
         return getRandomVariable() + "^" + getRandomVariable();
     }
 

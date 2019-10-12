@@ -2,12 +2,13 @@ package voronovo.koi2019.generation.test.pow;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;
 
 import static voronovo.koi2019.generation.util.RegExpUtil.handleSigns;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SameBaseRevertPowTestBuilder extends AbstractPowBuilder {
+public class SameBaseRevertPowTestBuilder extends AbstractCodeWrittenBuilder {
     private String pattern = "([+-]?)(\\d+)\\^([+-]?)(\\d+)([\\/*]?)([+-]?)(\\d+)\\^([+-]?)(\\d+)";
     private String sample = "[var1]^[var2]/*[var1]^[var3]";
 
@@ -18,8 +19,8 @@ public class SameBaseRevertPowTestBuilder extends AbstractPowBuilder {
     }
 
     @Override
-    public String generateOption() {
-        Integer sameBase = getRandomVariable();
+    public String generateOption(String option, String generatorValue) {
+        String sameBase = getRandomVariable();
         return sameBase + "^" + getRandomVariable() + handleSigns("*/") + sameBase + "^" + getRandomVariable();
     }
 
@@ -29,7 +30,7 @@ public class SameBaseRevertPowTestBuilder extends AbstractPowBuilder {
                 expression.replaceFirst(getPattern(), "$3$4$5$8$9")
                         .replace("*", "+")
                         .replace("/", "-"));
-        getOptions().put("answer", Integer.valueOf(degree));
+        getOptions().put("answer", degree);
         setExpression(expression.replaceFirst(getPattern(), "$1$2") + "^" + degree);
         return expression;
     }

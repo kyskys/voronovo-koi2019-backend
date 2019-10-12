@@ -51,8 +51,8 @@ public enum PostConditionType {
         @Override
         public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
             String[] patternParameters = condition.getValue().split(" ");
-            String sample = builder.replaceVariables(patternParameters[1].replace("answer", test.getCorrectAnswer()));
-            String correctAnswer = String.valueOf(builder.getVariablesMap().get(patternParameters[2]));
+            String sample = builder.replaceVariables(patternParameters[1].replace("[answer]", test.getCorrectAnswer()));
+            String correctAnswer = String.valueOf(builder.getFinalExpression(patternParameters[2]));
             List<String> allOptions = builder.generateAnswers(correctAnswer, test.getAllOptions().size());
             test.setExpression(sample);
             test.setCorrectAnswer(correctAnswer);
@@ -72,8 +72,8 @@ public enum PostConditionType {
 
         @Override
         public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
-            Map<String, Integer> variablesMap = builder.getVariablesMap();
-            Set<Integer> uniqueSet = new HashSet<>();
+            Map<String, String> variablesMap = builder.getVariablesMap();
+            Set<String> uniqueSet = new HashSet<>();
             boolean isUnique = variablesMap //берём мапу переменных
                     .keySet() //названия переменных
                     .stream()
