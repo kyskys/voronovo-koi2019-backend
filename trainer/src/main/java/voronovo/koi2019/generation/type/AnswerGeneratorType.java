@@ -5,21 +5,31 @@ import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
 import voronovo.koi2019.generation.test.AnswerGenerator;
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
 import voronovo.koi2019.generation.test.api.OptionGenerator;
+import voronovo.koi2019.generation.util.RegExpUtil;
 
 import java.util.EnumSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static voronovo.koi2019.generation.util.ConstantsHolder.DOUBLE_REGEX;
+import static voronovo.koi2019.generation.util.ConstantsHolder.NUMBER_REGEX;
 
 public enum AnswerGeneratorType {
     ANSWER_INTERVAL("interval") {
         @Override
         public String apply(String option, AnswerGenerator generator, DefaultTestBuilder builder) {
             if (((JavaScriptCalculator) builder.getCalculator()).isInteger()) {//TODO: заменить на генерик?
-                Integer toReturn = Integer.parseInt(option);
-                Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
-                return String.valueOf(toReturn - toMinus);
+                return RegExpUtil.replaceAllSeparately(option, NUMBER_REGEX, (number) -> {
+                    Integer toReturn = Integer.parseInt(number);
+                    Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
+                    return String.valueOf(toReturn - toMinus);
+                });
             } else {
-                Double toReturn = Double.parseDouble(option);
-                Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
-                return String.valueOf(toReturn - toMinus);
+                return RegExpUtil.replaceAllSeparately(option, DOUBLE_REGEX, (number) -> {
+                    Double toReturn = Double.parseDouble(number);
+                    Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
+                    return String.valueOf(toReturn - toMinus);
+                });
             }
         }
 
@@ -33,12 +43,16 @@ public enum AnswerGeneratorType {
     NEGATIVE("negative") {
         @Override
         public String apply(String option, AnswerGenerator generator, DefaultTestBuilder builder) {
-            if (((JavaScriptCalculator) builder.getCalculator()).isInteger()) {
-                int toReturn = Integer.parseInt(option);
-                return String.valueOf(0 - toReturn);
+            if (((JavaScriptCalculator) builder.getCalculator()).isInteger()) {//TODO: заменить на генерик?
+                return RegExpUtil.replaceAllSeparately(option, NUMBER_REGEX, (number) -> {
+                    int toReturn = Integer.parseInt(number);
+                    return String.valueOf(0 - toReturn);
+                });
             } else {
-                double toReturn = Double.parseDouble(option);
-                return String.valueOf(0 - toReturn);
+                return RegExpUtil.replaceAllSeparately(option, DOUBLE_REGEX, (number) -> {
+                    double toReturn = Double.parseDouble(number);
+                    return String.valueOf(0 - toReturn);
+                });
             }
         }
 

@@ -1,6 +1,8 @@
 package voronovo.koi2019.generation.util;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -79,5 +81,15 @@ public class RegExpUtil {
 //            result = matcher.replaceFirst("(" + matcher.group() + ")");
 //        }
 //        return result;
+    }
+
+    public static String replaceAllSeparately(String str, String regexp, Function<String, String> modifier) {
+        Matcher matcher = Pattern.compile(regexp).matcher(str);
+        StringBuffer result = new StringBuffer();
+        while(matcher.find()) {
+            matcher.appendReplacement(result, modifier.apply(matcher.group()));
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
 }
