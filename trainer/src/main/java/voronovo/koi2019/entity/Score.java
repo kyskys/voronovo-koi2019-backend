@@ -2,10 +2,7 @@ package voronovo.koi2019.entity;
 
 import lombok.Data;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 
 @Entity

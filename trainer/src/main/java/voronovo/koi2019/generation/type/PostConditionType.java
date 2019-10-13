@@ -51,7 +51,7 @@ public enum PostConditionType {
         @Override
         public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
             String[] patternParameters = condition.getValue().split(" ");
-            String sample = builder.replaceVariables(patternParameters[1].replace("[answer]", test.getCorrectAnswer()));
+            String sample = builder.getAdvancedFinalExpression(builder.replaceVariables(patternParameters[1].replace("[answer]", test.getCorrectAnswer())));
             String correctAnswer = String.valueOf(builder.getFinalExpression(patternParameters[2]));
             List<String> allOptions = builder.generateAnswers(correctAnswer, test.getAllOptions().size());
             test.setExpression(sample);

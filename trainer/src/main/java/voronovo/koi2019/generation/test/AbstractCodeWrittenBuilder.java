@@ -3,7 +3,6 @@ package voronovo.koi2019.generation.test;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import voronovo.koi2019.generation.test.DefaultTestBuilder;
 import voronovo.koi2019.generation.test.api.OptionGenerator;
 import voronovo.koi2019.generation.test.api.TestBuilderPart;
 import voronovo.koi2019.generation.util.RegExpUtil;
@@ -31,7 +30,6 @@ public abstract class AbstractCodeWrittenBuilder extends DefaultTestBuilder impl
         updateOptions();
         String result = RegExpUtil.handleSigns(sample);
         result = replaceVariables(result);
-        //result = RegExpUtil.handleNegativeSigns(result);
         return result;
     }
 

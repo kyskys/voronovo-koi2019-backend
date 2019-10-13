@@ -2,7 +2,6 @@ package voronovo.koi2019.generation.util;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -74,13 +73,9 @@ public class RegExpUtil {
     }
 
     public static String handleNegativeSigns(String result) {
-        String pattern = "([+\\-*])([+\\-*]\\d+)";
+        result = result.replaceAll("([+])([-]\\d+)", "$2"); //замена +- на -
+        String pattern = "([\\-/*])([+\\-*]\\d+)"; //экранирование отрицательного числа скобками
         return result.replaceAll(pattern, "$1($2)");
-//        Matcher matcher = Pattern.compile(pattern).matcher(result);
-//        while (matcher.find()) {
-//            result = matcher.replaceFirst("(" + matcher.group() + ")");
-//        }
-//        return result;
     }
 
     public static String replaceAllSeparately(String str, String regexp, Function<String, String> modifier) {

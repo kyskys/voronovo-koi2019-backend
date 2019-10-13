@@ -8,8 +8,6 @@ import voronovo.koi2019.generation.test.api.OptionGenerator;
 import voronovo.koi2019.generation.util.RegExpUtil;
 
 import java.util.EnumSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static voronovo.koi2019.generation.util.ConstantsHolder.DOUBLE_REGEX;
 import static voronovo.koi2019.generation.util.ConstantsHolder.NUMBER_REGEX;
@@ -25,11 +23,14 @@ public enum AnswerGeneratorType {
                     return String.valueOf(toReturn - toMinus);
                 });
             } else {
-                return RegExpUtil.replaceAllSeparately(option, DOUBLE_REGEX, (number) -> {
-                    Double toReturn = Double.parseDouble(number);
-                    Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
-                    return String.valueOf(toReturn - toMinus);
-                });
+                Double toReturn = Double.parseDouble(option);
+                Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
+                return String.valueOf(toReturn - toMinus);
+//                return RegExpUtil.replaceAllSeparately(option, DOUBLE_REGEX, (number) -> {
+//                    Double toReturn = Double.parseDouble(number);
+//                    Integer toMinus = (int) Math.round(Math.random() * Integer.parseInt(generator.getValue()));
+//                    return String.valueOf(toReturn - toMinus);
+//                });//TODO: обработать для случаев, когда значение всё же целочисленно, например 4
             }
         }
 
@@ -63,7 +64,7 @@ public enum AnswerGeneratorType {
             return new AnswerGenerator(this, Integer.parseInt(typeAndFrequency[1]), null);
         }
     },
-    PATTERN("modify") {
+    MODIFY("modify") {
         @Override
         public <T extends Calculator> String apply(String option, AnswerGenerator generator, DefaultTestBuilder builder) {
             if(builder instanceof OptionGenerator) {

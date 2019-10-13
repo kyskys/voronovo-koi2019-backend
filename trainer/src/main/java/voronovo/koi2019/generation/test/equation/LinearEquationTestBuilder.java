@@ -12,7 +12,7 @@ public class LinearEquationTestBuilder extends AbstractCodeWrittenBuilder {
 
     @Override
     protected void updateOptions() {
-//        getOptions().put("answer2", getRandomVariable() + getRandomVariable());
+//        getOptions().put("answer2", getRandomVariable() + getRandomVariable()); //пример, как можно добавить случайности ответам
 //        getOptions().put("answer3", getRandomVariable() - getRandomVariable());
     }
 

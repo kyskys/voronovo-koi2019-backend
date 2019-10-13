@@ -54,14 +54,14 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
 
     @Override
     public String getAnswer(String expression) {
-        return calculator.calculateExpression(expression);
+        String result = calculator.calculateExpression(expression);
+        variablesMap.put("answer", result);
+        return result;
     }
 
     @Override
     public List<String> generateAnswers(String answer, int incorrectAnswers) {
         List<String> options = new ArrayList<>(Collections.nCopies(incorrectAnswers, answer));
-        IntStream.range(0, answerGenerators.size()).forEach(j -> {
-            Collections.shuffle(options);
             IntStream.range(0, incorrectAnswers).forEach(i -> {
                 String option = options.get(i);
                 do {
@@ -71,7 +71,6 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
                 } while (options.contains(option) || option.equals(answer));
                 options.set(i, option);
             });
-        });
         return options;
     }
 
@@ -79,6 +78,13 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
     public String getFinalExpression(String sample) {
         String result = sample;
         result = RegExpUtil.handleSigns(result);
+        result = replaceVariables(result);
+        result = RegExpUtil.handleNegativeSigns(result);
+        return result;
+    }
+
+    public String getAdvancedFinalExpression(String sample) {
+        String result = sample;
         result = replaceVariables(result);
         result = RegExpUtil.handleNegativeSigns(result);
         return result;
@@ -102,6 +108,6 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
     @Override
     public String generateOption(String option, String generatorValue) {
         option = generatorValue.replace("[option]", option);
-        return getAnswer(getFinalExpression(option));
+        return calculator.calculateExpression(option);
     }
 }

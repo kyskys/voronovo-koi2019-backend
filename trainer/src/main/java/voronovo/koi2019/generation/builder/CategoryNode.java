@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import voronovo.koi2019.generation.test.DefaultTestBuilder;
 import voronovo.koi2019.generation.test.api.TestBuilder;
 import voronovo.koi2019.generation.util.NodeUtil;
 

@@ -19,7 +19,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 @EnableSwagger2WebMvc
 @Import({SpringDataRestConfiguration.class})
 public class MainApplication extends SpringBootServletInitializer {
-
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }
@@ -39,35 +38,4 @@ public class MainApplication extends SpringBootServletInitializer {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         return builder.modulesToInstall(new JavaTimeModule());
     }
-
-//    public class VariableInitListener {
-//        private voronovo.koi2019.generation.task.TaskBuilder taskContext;
-//        private String variableId;
-//        private voronovo.koi2019.generation.condition.Precondition precondition;
-//
-//        VariableInitListener create(String variableId, voronovo.koi2019.generation.condition.Precondition precondition, voronovo.koi2019.generation.task.TaskBuilder taskContext) {
-//            return new VariableInitListener(variableId, precondition, taskContext);
-//        }
-//
-//        private VariableInitListener(String variableId, voronovo.koi2019.generation.condition.Precondition precondition, voronovo.koi2019.generation.task.TaskBuilder taskContext) {
-//            this.taskContext = taskContext;
-//            this.precondition = precondition;
-//            this.variableId = variableId;
-//        }
-//
-//        public Optional<VariableInitListener> tryToCalculate() {
-//            return null;
-////            precondition.getPreconditionType().generateValue();
-//        }
-//    }
-
-//    public static void main(String[] args) {
-////        voronovo.koi2019.generation.util.RegExpUtil.findAll("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", voronovo.koi2019.generation.util.RegexConst.VARIABLE_REGEX).forEach(System.out::println);
-////        voronovo.koi2019.generation.util.RegExpUtil.findAllUnique("dsnfkjsdnf kjnsd var skdf [var1] [var1]  [var222]", voronovo.koi2019.generation.util.RegexConst.VARIABLE_REGEX).forEach(System.out::println);
-//        TaskBuilder taskBuilder = new TaskBuilder("[var1] + [var2] * [var3] + [var444]", "var1 between 1;100 " +
-//                "<> var2 between 50;55 <> var3 between 3;33 <> var444 == 9", new SimpleIntegerResultCalculator(), new AnswerGenerator() {});
-//        //3 варианта неправильных ответов
-//        Task build = taskBuilder.build(3);
-//        System.out.println(build.toString());
-//    }
 }

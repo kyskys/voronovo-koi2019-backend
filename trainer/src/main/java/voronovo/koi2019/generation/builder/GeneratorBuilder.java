@@ -1,8 +1,6 @@
 package voronovo.koi2019.generation.builder;
 
-import org.aspectj.weaver.ast.Test;
 import org.springframework.stereotype.Component;
-import voronovo.koi2019.generation.test.DefaultTestBuilder;
 import voronovo.koi2019.generation.test.MultiTestBuilder;
 import voronovo.koi2019.generation.util.TestBuilderUtil;
 
@@ -11,8 +9,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static voronovo.koi2019.generation.util.ConstantsHolder.SEPARATOR;
 
 @Component
 public class GeneratorBuilder {
