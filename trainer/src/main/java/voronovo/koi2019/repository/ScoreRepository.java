@@ -9,5 +9,5 @@ import voronovo.koi2019.entity.Score;
 
 @RepositoryRestResource
 public interface ScoreRepository extends PagingAndSortingRepository<Score, Long> {
-    Page<Score> findAllByCategoryLikeOrderByTimeDescNameDesc(@RequestParam String category, Pageable pageable);
+    Page<Score> findAllByCategoryLikeOrderByTimeAscNameDesc(@RequestParam String category, Pageable pageable);
 }
