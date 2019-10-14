@@ -64,7 +64,7 @@ public enum PostConditionType {
             return new PostCondition(this, value);
         }
     },
-    NOT_EQUAL("not equal") {
+    NOT_EQUAL("verify") {
         @Override
         public boolean isInvalid(Test test) {
             return test.getCorrectAnswer().equals(test.getExpression());
@@ -72,18 +72,24 @@ public enum PostConditionType {
 
         @Override
         public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
-            Map<String, String> variablesMap = builder.getVariablesMap();
-            Set<String> uniqueSet = new HashSet<>();
-            boolean isUnique = variablesMap //берём мапу переменных
-                    .keySet() //названия переменных
-                    .stream()
-                    .filter(variable -> condition.getValue().contains(variable)) //оставляем те названия, что указаны в настройке
-                    .map(variablesMap::get) //берём их числовые значения
-                    .allMatch(uniqueSet::add); //добавляем в Set, если не добавило - значит есть одинаковые числа
-            if(!isUnique) { //в isInvalid(Test test) откидываем этот тест, делая такую замену и проверку
+            String result = builder.getAdvancedFinalExpression(condition.getValue().split(" ")[1]);
+            result = builder.getCalculator().calculateExpression(result);
+            if(!result.equals("true")) {
                 test.setExpression("invalid");
                 test.setCorrectAnswer("invalid");
             }
+//            Map<String, String> variablesMap = builder.getVariablesMap();
+//            Set<String> uniqueSet = new HashSet<>();
+//            boolean isUnique = variablesMap //берём мапу переменных
+//                    .keySet() //названия переменных
+//                    .stream()
+//                    .filter(variable -> condition.getValue().contains(variable)) //оставляем те названия, что указаны в настройке
+//                    .map(variablesMap::get) //берём их числовые значения
+//                    .allMatch(uniqueSet::add); //добавляем в Set, если не добавило - значит есть одинаковые числа
+//            if(!isUnique) { //в isInvalid(Test test) откидываем этот тест, делая такую замену и проверку
+//                test.setExpression("invalid");
+//                test.setCorrectAnswer("invalid");
+//            }
         }
 
         @Override
