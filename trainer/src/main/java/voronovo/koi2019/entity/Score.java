@@ -11,8 +11,7 @@ public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Temporal(TemporalType.TIME)
-    private Date time;
+    private long time;
     @Temporal(TemporalType.DATE)
     private Date date;
     private String name;

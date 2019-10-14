@@ -14,10 +14,12 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import voronovo.koi2019.generation.builder.GeneratorNameConfig;
+import voronovo.koi2019.generation.builder.GeneratorSampleConfig;
 
 @SpringBootApplication
 @EnableSwagger2WebMvc
-@Import({SpringDataRestConfiguration.class})
+@Import({SpringDataRestConfiguration.class, GeneratorNameConfig.class, GeneratorSampleConfig.class})
 public class MainApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
