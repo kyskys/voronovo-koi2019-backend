@@ -23,8 +23,15 @@ steps:
 #     contents: 'trainer-1.0-SNAPSHOT.jar' 
 #     targetFolder: '../home'
 - task: SSH@0
-  displayName: 'Rebooting trainer server'
+  displayName: 'Shutting down trainer server'
   inputs:
     sshEndpoint: 'trainer'
     runOptions: inline
-    inline: 'sh trainer.sh'
+    inline: 'fuser -k 8080/tcp'
+- task: SSH@0
+  displayName: 'Starting trainer server'
+  inputs:
+    sshEndpoint: 'trainer'
+    runOptions: inline
+    inline: 'nohup java -jar ../home/trainer-1.0-SNAPSHOT.jar >/dev/null &'
+    
