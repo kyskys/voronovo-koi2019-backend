@@ -27,7 +27,7 @@ steps:
   inputs:
     sshEndpoint: 'trainer'
     runOptions: inline
-    inline: 'fuser -k 8080/tcp'
+    inline: 'fuser -k 8080/tcp >/dev/null'
 - task: SSH@0
   displayName: 'Starting trainer server'
   inputs:
