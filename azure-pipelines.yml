@@ -27,7 +27,7 @@ steps:
   inputs:
     sshEndpoint: 'trainer'
     runOptions: inline
-    inline: 'kill $(lsof -t -i:8080)'
+    inline: 'kill -9 $(lsof -t -i:8080)'
 - task: SSH@0
   displayName: 'Starting trainer server'
   inputs:
