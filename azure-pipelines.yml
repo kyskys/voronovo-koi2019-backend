@@ -10,15 +10,21 @@ pool:
   vmImage: 'ubuntu-16.04'
 
 steps:
-- task: Maven@3
-  displayName: 'Maven build'
-  inputs:
-    mavenPomFile: 'trainer/pom.xml'
-    goals: 'clean install'
-- task: CopyFilesOverSSH@0
-  displayName: 'Copying to remote server'
+# - task: Maven@3
+#   displayName: 'Maven build'
+#   inputs:
+#     mavenPomFile: 'trainer/pom.xml'
+#     goals: 'clean install'
+# - task: CopyFilesOverSSH@0
+#   displayName: 'Copying to remote server'
+#   inputs:
+#     sshEndpoint: 'trainer'
+#     sourceFolder: 'trainer/target/'
+#     contents: 'trainer-1.0-SNAPSHOT.jar' 
+#     targetFolder: '../home'
+- task: SSH@0
+  displayName: 'Rebooting trainer server'
   inputs:
     sshEndpoint: 'trainer'
-    sourceFolder: 'trainer/target/'
-    contents: 'trainer-1.0-SNAPSHOT.jar' 
-    targetFolder: '../home'
+    runOptions: inline
+    inline: 'sh trainer.sh'
