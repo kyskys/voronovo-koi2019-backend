@@ -21,4 +21,4 @@ steps:
     sshEndpoint: 'trainer'
     sourceFolder: 'trainer/target/'
     contents: 'trainer-1.0-SNAPSHOT.jar' 
-    targetFolder: 'home'
+    targetFolder: '**/home'
