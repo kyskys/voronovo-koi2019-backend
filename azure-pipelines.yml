@@ -13,9 +13,10 @@ steps:
 - task: Maven@3
   inputs:
     mavenPomFile: 'trainer/pom.xml'
-    # mavenOptions: '-Xmx3072m'
-    # javaHomeOption: 'JDKVersion'
-    # jdkVersionOption: '1.11'
-    # jdkArchitectureOption: 'x64'
-    # publishJUnitResults: false
     goals: 'clean install'
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'trainer'
+    sourceFolder: '.m2/repository/voronovo/koi2019/trainer/1.0-SNAPSHOT'
+    contents: 'trainer-1.0-SNAPSHOT.jar' 
+    targetFolder: 'home'
