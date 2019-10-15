@@ -27,7 +27,7 @@ steps:
   inputs:
     sshEndpoint: 'trainer'
     runOptions: inline
-    inline: 'nohup sudo fuser -k 8080/tcp >/dev/null'
+    inline: 'nohup sudo fuser -k 8080/tcp >/dev/null 2>&1'
 - task: SSH@0
   displayName: 'Starting trainer server'
   inputs:
