@@ -11,12 +11,14 @@ pool:
 
 steps:
 - task: Maven@3
+  displayName: 'Maven build'
   inputs:
     mavenPomFile: 'trainer/pom.xml'
     goals: 'clean install'
 - task: CopyFilesOverSSH@0
+  displayName: 'Copying to remote server'
   inputs:
     sshEndpoint: 'trainer'
-    sourceFolder: '.m2/repository/voronovo/koi2019/trainer/1.0-SNAPSHOT'
+    sourceFolder: 'trainer/target/'
     contents: 'trainer-1.0-SNAPSHOT.jar' 
     targetFolder: 'home'
