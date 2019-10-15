@@ -76,6 +76,11 @@
             <artifactId>commons-io</artifactId>
             <version>${org.apache.io.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>6.10.0</version>
+        </dependency>
     </dependencies>
 
     <build>
