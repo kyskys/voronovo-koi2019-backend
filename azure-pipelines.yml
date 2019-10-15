@@ -27,4 +27,4 @@ steps:
   inputs:
     sshEndpoint: 'trainer'
     runOptions: inline
-    inline: 'sh trainer.sh'
+    inline: 'systemctl restart trainer.service'
