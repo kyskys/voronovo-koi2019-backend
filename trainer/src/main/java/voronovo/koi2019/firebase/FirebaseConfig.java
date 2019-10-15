@@ -13,20 +13,20 @@ import java.io.IOException;
 @Service
 public class FirebaseConfig {
 
-    @Value("${app.firebase-configuration-file}")
-    private String firebaseConfigPath;
-
-    @PostConstruct
-    public void initialize() {
-        try {
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())).build();
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("can't initialize firebase connection", e);
-        }
-    }
+//    @Value("${app.firebase-configuration-file}")
+//    private String firebaseConfigPath;
+//
+//    @PostConstruct
+//    public void initialize() {
+//        try {
+//            FirebaseOptions options = new FirebaseOptions.Builder()
+//                    .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())).build();
+//            if (FirebaseApp.getApps().isEmpty()) {
+//                FirebaseApp.initializeApp(options);
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException("can't initialize firebase connection", e);
+//        }
+//    }
 
 }
