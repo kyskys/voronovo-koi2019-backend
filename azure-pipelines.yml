@@ -23,8 +23,8 @@ steps:
     contents: 'trainer-1.0-SNAPSHOT.jar' 
     targetFolder: '../home'
 - task: SSH@0
-  displayName: 'Rebooting server'
+  displayName: 'Rebooting trainer server'
   inputs:
     sshEndpoint: 'trainer'
-    runOptions: script
-    scriptPath: 'trainer'
+    runOptions: inline
+    inline: 'sh trainer.sh'
