@@ -90,16 +90,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-<!--        <resources>-->
-<!--            <resource>-->
-<!--                <directory>src/main/resources</directory>-->
-<!--                <filtering>true</filtering>-->
-<!--                <excludes>-->
-<!--                    <exclude>**/generator.properties</exclude>-->
-<!--                    <exclude>**/name.properties</exclude>-->
-<!--                    <exclude>**/application.properties</exclude>-->
-<!--                </excludes>-->
-<!--            </resource>-->
-<!--        </resources>-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/google/*json</exclude>
+                </excludes>
+            </resource>
+        </resources>
     </build>
 </project>
