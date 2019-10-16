@@ -65,9 +65,11 @@ public class PushNotificationService {
 
 
     private PushNotificationRequest getSamplePushNotificationRequest() {
-        PushNotificationRequest request = new PushNotificationRequest(defaults.get("title"),
+        PushNotificationRequest request = new PushNotificationRequest(
+                defaults.get("topic"),
+                defaults.get("title"),
                 defaults.get("message"),
-                defaults.get("topic"), null);
+                null);
         return request;
     }
 
