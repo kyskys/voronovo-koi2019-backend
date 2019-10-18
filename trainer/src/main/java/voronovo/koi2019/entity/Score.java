@@ -22,6 +22,7 @@ public class Score {
 
     public Score(String name, String category, long time, Integer percent) {
         this.id = 0L;
+        this.date = new Date();
         this.name = name;
         this.category = category;
         this.time = time;
