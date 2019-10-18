@@ -1,6 +1,8 @@
 package voronovo.koi2019.generation.builder;
 
 import org.springframework.stereotype.Component;
+import voronovo.koi2019.config.GeneratorNameConfig;
+import voronovo.koi2019.config.GeneratorSampleConfig;
 import voronovo.koi2019.generation.test.MultiTestBuilder;
 import voronovo.koi2019.generation.util.TestBuilderUtil;
 

@@ -1,4 +1,4 @@
-package voronovo.koi2019.firebase;
+package voronovo.koi2019.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;

@@ -1,4 +1,4 @@
-package voronovo.koi2019.generation.builder;
+package voronovo.koi2019.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,9 +10,9 @@ import java.util.Map;
 
 @Component
 @Configuration
-@PropertySource(value = "classpath:name.properties", encoding = "UTF-8")
-@ConfigurationProperties(prefix = "generator")
+@PropertySource(value = "classpath:generator.properties", encoding = "UTF-8")
+@ConfigurationProperties(prefix = "builder")
 @Data
-public class GeneratorNameConfig {
-    private Map<String, String> names;
+public class GeneratorSampleConfig {
+    private Map<String, String> samples;
 }

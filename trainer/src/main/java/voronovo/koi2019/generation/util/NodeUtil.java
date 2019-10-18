@@ -3,7 +3,7 @@ package voronovo.koi2019.generation.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.builder.CategoryNode;
-import voronovo.koi2019.generation.builder.GeneratorNameConfig;
+import voronovo.koi2019.config.GeneratorNameConfig;
 
 import java.util.Map;
 import java.util.function.Function;

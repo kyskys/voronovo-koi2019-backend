@@ -16,8 +16,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
-import voronovo.koi2019.generation.builder.GeneratorNameConfig;
-import voronovo.koi2019.generation.builder.GeneratorSampleConfig;
+import voronovo.koi2019.config.GeneratorNameConfig;
+import voronovo.koi2019.config.GeneratorSampleConfig;
 
 @SpringBootApplication
 @EnableSwagger2WebMvc
