@@ -21,25 +21,25 @@ public class ScoreController {
         this.scoreRepository = scoreRepository;
     }
 
-    @PostMapping("scores")
-    public ResponseEntity<Score> save(@RequestBody Score newScore) {
-        Score result;
-        Optional<Score> optionalScore = scoreRepository.findFirstByNameAndCategoryLikeIgnoreCase(newScore.getName(), "%" + newScore.getCategory() + "%");
-        if (optionalScore.isPresent()) {
-            Score score = optionalScore.get();
-            if (newScore.getTime() < score.getTime()) {
-                score.setTime(newScore.getTime());
-                score.setPercent(newScore.getPercent());
-                score.setDate(newScore.getDate());
-            }
-            result = score;
-        } else {
-            scoreRepository.save(newScore);
-            result = newScore;
-        }
-        scoreRepository.save(result);
-        Resource<Score> resources = new Resource<>(result);
-        resources.add(linkTo(methodOn(ScoreController.class).save(result)).withSelfRel());
-        return ResponseEntity.ok(result);
-    }
+//    @PostMapping("scores")
+//    public ResponseEntity<Score> save(@RequestBody Score newScore) {
+//        Score result;
+//        Optional<Score> optionalScore = scoreRepository.findFirstByNameAndCategoryLikeIgnoreCase(newScore.getName(), "%" + newScore.getCategory() + "%");
+//        if (optionalScore.isPresent()) {
+//            Score score = optionalScore.get();
+//            if (newScore.getTime() < score.getTime()) {
+//                score.setTime(newScore.getTime());
+//                score.setPercent(newScore.getPercent());
+//                score.setDate(newScore.getDate());
+//            }
+//            result = score;
+//        } else {
+//            scoreRepository.save(newScore);
+//            result = newScore;
+//        }
+//        scoreRepository.save(result);
+//        Resource<Score> resources = new Resource<>(result);
+//        resources.add(linkTo(methodOn(ScoreController.class).save(result)).withSelfRel());
+//        return ResponseEntity.ok(result);
+//    }
 }

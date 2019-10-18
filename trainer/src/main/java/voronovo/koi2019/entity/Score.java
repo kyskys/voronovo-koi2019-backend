@@ -1,12 +1,14 @@
 package voronovo.koi2019.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,6 +19,14 @@ public class Score {
     private String name;
     private String category;
     private Integer percent;
+
+    public Score(String name, String category, long time, Integer percent) {
+        this.id = 0L;
+        this.name = name;
+        this.category = category;
+        this.time = time;
+        this.percent = percent;
+    }
 
     @PrePersist
     @PreUpdate
