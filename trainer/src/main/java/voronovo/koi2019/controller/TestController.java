@@ -18,7 +18,6 @@ import java.util.Map;
 import static voronovo.koi2019.controller.TestController.CATEGORIES_URL_PART;
 
 @RestController
-@RequestMapping(CATEGORIES_URL_PART)
 public class TestController {
 
     static final String CATEGORIES_URL_PART = "/categories/";
@@ -28,12 +27,12 @@ public class TestController {
     private GeneratorBuilder generatorBuilder;
 
 
-    @GetMapping
+    @GetMapping("categoryNames")
     public Map<String, String> getCategoryNames() {
         return NodeUtil.getGeneratorNames();
     }
 
-    @GetMapping("**/generate")
+    @GetMapping(CATEGORIES_URL_PART + "**/generate")
     public List<Test> getGenerator(HttpServletRequest request,
                                    @RequestParam(value = "amount", required = false) Integer amount,
                                    @RequestParam(value = "incorrectAnswers", required = false) Integer incorrectAnswers) {
@@ -41,7 +40,7 @@ public class TestController {
         return testBuilder.buildBatch(amount, incorrectAnswers);
     }
 
-    @GetMapping("**")
+    @GetMapping(CATEGORIES_URL_PART + "**")
     public CategoryNode findNodes(HttpServletRequest request) {
         return generatorBuilder.findNode(getNodePath(request));
     }
