@@ -1,5 +1,6 @@
 package voronovo.koi2019.generation.util;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import voronovo.koi2019.generation.builder.CategoryNode;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class NodeUtil {
+    @Getter
     private static Map<String, String> generatorNames;
 
     @Autowired

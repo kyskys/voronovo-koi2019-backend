@@ -8,10 +8,12 @@ import voronovo.koi2019.generation.builder.CategoryNode;
 import voronovo.koi2019.generation.builder.GeneratorBuilder;
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
 import voronovo.koi2019.generation.test.api.TestBuilder;
+import voronovo.koi2019.generation.util.NodeUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.List;
+import java.util.Map;
 
 import static voronovo.koi2019.controller.TestController.CATEGORIES_URL_PART;
 
@@ -24,6 +26,12 @@ public class TestController {
 
     @Autowired
     private GeneratorBuilder generatorBuilder;
+
+
+    @GetMapping
+    public Map<String, String> getCategoryNames() {
+        return NodeUtil.getGeneratorNames();
+    }
 
     @GetMapping("**/generate")
     public List<Test> getGenerator(HttpServletRequest request,
