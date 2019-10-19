@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestParam;
 import voronovo.koi2019.entity.Question;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 @RepositoryRestResource
@@ -16,6 +17,7 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
                                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                                     Date beforeDate);
 
+    @Transactional
     @Modifying
     @Query("update Question q set q.winner=:winner where id=:id")
     void updateQuestionWinner(Long id, String winner);
