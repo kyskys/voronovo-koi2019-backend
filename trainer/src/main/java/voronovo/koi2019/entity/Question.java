@@ -13,13 +13,11 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String description;
-    @ElementCollection
-    @CollectionTable(name = "question_answer", joinColumns = @JoinColumn(name = "question_id"))
-    private List<String> allOptions;
     private String correctAnswer;
     private String image;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    private String winner;
 
     @PrePersist
     private void setCreationDate() {
