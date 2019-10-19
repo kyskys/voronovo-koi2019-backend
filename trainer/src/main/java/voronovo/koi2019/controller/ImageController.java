@@ -1,7 +1,9 @@
 package voronovo.koi2019.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import voronovo.koi2019.entity.ResponseDummy;
 import voronovo.koi2019.service.ImageService;
 
 @RestController
@@ -19,8 +21,8 @@ public class ImageController {
     }
 
     @PostMapping
-    public String uploadImage(MultipartFile file) {
-        return imageService.createImage(file);
+    public ResponseEntity<ResponseDummy> uploadImage(MultipartFile file) {
+        return ResponseEntity.ok(new ResponseDummy<>(imageService.createImage(file)));
     }
 
     @DeleteMapping
