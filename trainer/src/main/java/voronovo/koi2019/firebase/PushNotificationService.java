@@ -30,6 +30,14 @@ public class PushNotificationService {
         }
     }
 
+    public void sendIsNewQuestionNotification(boolean isNewQuestion) {
+        try {
+            service.sendMessage(getIsNewQuestionData(isNewQuestion), getSamplePushNotificationRequest());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("error during sending push notification", e);
+        }
+    }
+
     public void sendPushNotification(PushNotificationRequest request) {
         try {
             service.sendMessage(getSamplePayloadData(), request);
@@ -60,9 +68,15 @@ public class PushNotificationService {
         Map<String, String> pushData = new HashMap<>();
         pushData.put("messageId", defaults.get("payloadMessageId"));
         pushData.put("text", defaults.get("payloadData") + " " + LocalDateTime.now());
+        pushData.put("isNewQuestion", "true");
         return pushData;
     }
 
+    private Map<String, String> getIsNewQuestionData(boolean isNewQuestion) {
+        Map<String, String> pushData = new HashMap<>();
+        pushData.put("isNewQuestion", String.valueOf(isNewQuestion));
+        return pushData;
+    }
 
     private PushNotificationRequest getSamplePushNotificationRequest() {
         PushNotificationRequest request = new PushNotificationRequest(
@@ -72,6 +86,4 @@ public class PushNotificationService {
                 null);
         return request;
     }
-
-
 }
