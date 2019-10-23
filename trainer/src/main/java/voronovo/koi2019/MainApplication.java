@@ -21,7 +21,7 @@ import voronovo.koi2019.config.GeneratorSampleConfig;
 
 @SpringBootApplication
 @EnableSwagger2WebMvc
-@Import({SpringDataRestConfiguration.class, GeneratorNameConfig.class, GeneratorSampleConfig.class})
+@Import(SpringDataRestConfiguration.class)
 public class MainApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);

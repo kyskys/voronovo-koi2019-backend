@@ -1,7 +1,7 @@
 package voronovo.koi2019.generation.type;
 
 import voronovo.koi2019.condition.PostCondition;
-import voronovo.koi2019.entity.Test;
+import voronovo.koi2019.entity.TestItem;
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
 
 import java.util.*;
@@ -12,12 +12,12 @@ import static voronovo.koi2019.generation.util.ConstantsHolder.*;
 public enum PostConditionType {
     NONE("none") {
         @Override
-        public boolean isInvalid(Test test) {
+        public boolean isInvalid(TestItem testItem) {
             return false;
         }
 
         @Override
-        public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
+        public void modify(TestItem testItem, PostCondition condition, DefaultTestBuilder builder) {
 
         }
 
@@ -28,13 +28,13 @@ public enum PostConditionType {
     },
     IS_INTEGER("integer") {
         @Override
-        public boolean isInvalid(Test test) {
-            return test.getCorrectAnswer().matches(IS_INTEGER_REGEX);
+        public boolean isInvalid(TestItem testItem) {
+            return testItem.getCorrectAnswer().matches(IS_INTEGER_REGEX);
         }
 
         @Override
-        public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
-            test.setAllOptions(test.getAllOptions().stream().map(option -> option.matches(IS_INTEGER_REGEX) ? option.split("\\.")[0] : option).collect(Collectors.toList()));
+        public void modify(TestItem testItem, PostCondition condition, DefaultTestBuilder builder) {
+            testItem.setAllOptions(testItem.getAllOptions().stream().map(option -> option.matches(IS_INTEGER_REGEX) ? option.split("\\.")[0] : option).collect(Collectors.toList()));
         }
 
         @Override
@@ -44,19 +44,19 @@ public enum PostConditionType {
     },
     PATTERN("pattern") {
         @Override
-        public boolean isInvalid(Test test) {
+        public boolean isInvalid(TestItem testItem) {
             return false;
         }
 
         @Override
-        public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
+        public void modify(TestItem testItem, PostCondition condition, DefaultTestBuilder builder) {
             String[] patternParameters = condition.getValue().split(" ");
-            String sample = builder.getAdvancedFinalExpression(builder.replaceVariables(patternParameters[1].replace("[answer]", test.getCorrectAnswer())));
+            String sample = builder.getAdvancedFinalExpression(builder.replaceVariables(patternParameters[1].replace("[answer]", testItem.getCorrectAnswer())));
             String correctAnswer = String.valueOf(builder.getFinalExpression(patternParameters[2]));
-            List<String> allOptions = builder.generateAnswers(correctAnswer, test.getAllOptions().size());
-            test.setExpression(sample);
-            test.setCorrectAnswer(correctAnswer);
-            test.setAllOptions(allOptions);
+            List<String> allOptions = builder.generateAnswers(correctAnswer, testItem.getAllOptions().size());
+            testItem.setExpression(sample);
+            testItem.setCorrectAnswer(correctAnswer);
+            testItem.setAllOptions(allOptions);
         }
 
         @Override
@@ -66,17 +66,17 @@ public enum PostConditionType {
     },
     NOT_EQUAL("verify") {
         @Override
-        public boolean isInvalid(Test test) {
-            return test.getCorrectAnswer().equals(test.getExpression());
+        public boolean isInvalid(TestItem testItem) {
+            return testItem.getCorrectAnswer().equals(testItem.getExpression());
         }
 
         @Override
-        public void modify(Test test, PostCondition condition, DefaultTestBuilder builder) {
+        public void modify(TestItem testItem, PostCondition condition, DefaultTestBuilder builder) {
             String result = builder.getAdvancedFinalExpression(condition.getValue().split(" ")[1]);
             result = builder.getCalculator().calculateExpression(result);
             if(!result.equals("true")) {
-                test.setExpression("invalid");
-                test.setCorrectAnswer("invalid");
+                testItem.setExpression("invalid");
+                testItem.setCorrectAnswer("invalid");
             }
 //            Map<String, String> variablesMap = builder.getVariablesMap();
 //            Set<String> uniqueSet = new HashSet<>();
@@ -110,9 +110,9 @@ public enum PostConditionType {
                 .getCondition(condition.trim());
     }
 
-    public abstract boolean isInvalid(Test test);
+    public abstract boolean isInvalid(TestItem testItem);
 
-    public abstract void modify(Test test, PostCondition condition, DefaultTestBuilder builder);
+    public abstract void modify(TestItem testItem, PostCondition condition, DefaultTestBuilder builder);
 
     public abstract PostCondition getCondition(String value);
 }

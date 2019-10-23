@@ -1,7 +1,7 @@
 package voronovo.koi2019.generation.test;
 
 import lombok.*;
-import voronovo.koi2019.entity.Test;
+import voronovo.koi2019.entity.TestItem;
 import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.condition.PostCondition;
 import voronovo.koi2019.condition.PreCondition;
@@ -34,22 +34,22 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
     }
 
     @Override
-    public Test build(int incorrectAnswers) {
+    public TestItem build(int incorrectAnswers) {
         initVariables();
         setExpression(getFinalExpression(getSample()));
         String answer = getAnswer(getExpression());
         List<String> answers = generateAnswers(answer, incorrectAnswers);
-        Test test = new Test(expression, answers, answer);
+        TestItem testItem = new TestItem(expression, answers, answer);
         if (this.postConditions != null) {
             boolean needToRestart = this.postConditions
                     .stream()
-                    .peek(condition -> condition.getType().modify(test, condition, this))
-                    .map(condition -> condition.getType().isInvalid(test))
+                    .peek(condition -> condition.getType().modify(testItem, condition, this))
+                    .map(condition -> condition.getType().isInvalid(testItem))
                     .reduce((b1, b2) -> b1 || b2)
                     .orElseThrow(() -> new IllegalArgumentException("wrong post conditions configuration"));
-            return needToRestart ? build(incorrectAnswers) : test;
+            return needToRestart ? build(incorrectAnswers) : testItem;
         };
-        return test;
+        return testItem;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class DefaultTestBuilder extends AbstractTestBuilder implements TestBuild
     }
 
     @Override
-    public List<Test> buildBatch(Integer amount, Integer incorrectAnswers) {
+    public List<TestItem> buildBatch(Integer amount, Integer incorrectAnswers) {
         return IntStream
                 .range(0, Optional.ofNullable(amount).orElse(ConstantsHolder.DEFAULT_BATCH_SIZE))
                 .mapToObj(i -> build(Optional.ofNullable(incorrectAnswers).orElse(ConstantsHolder.DEFAULT_INCORRECT_ANSWERS)))

@@ -1,7 +1,7 @@
 package voronovo.koi2019.generation.test;
 
 import lombok.Data;
-import voronovo.koi2019.entity.Test;
+import voronovo.koi2019.entity.TestItem;
 import voronovo.koi2019.generation.test.api.TestBuilder;
 import voronovo.koi2019.generation.util.ConstantsHolder;
 import voronovo.koi2019.generation.util.TestBuilderUtil;
@@ -16,7 +16,7 @@ public class MultiTestBuilder implements TestBuilder {
     private List<TestBuilder> builders;
 
     @Override
-    public List<Test> buildBatch(Integer amount, Integer incorrectAnswers) {
+    public List<TestItem> buildBatch(Integer amount, Integer incorrectAnswers) {
         return IntStream
                 .range(0, Optional.ofNullable(amount).orElse(ConstantsHolder.DEFAULT_BATCH_SIZE))
                 .mapToObj(i -> build(Optional.ofNullable(incorrectAnswers).orElse(ConstantsHolder.DEFAULT_INCORRECT_ANSWERS)))
@@ -24,7 +24,7 @@ public class MultiTestBuilder implements TestBuilder {
     }
 
     @Override
-    public Test build(int incorrectAnswers) {
+    public TestItem build(int incorrectAnswers) {
         return getRandomBuilder().build(incorrectAnswers);
     }
 
