@@ -1,9 +1,11 @@
 package voronovo.koi2019.firebase;
 
+import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,8 +50,8 @@ public class PushNotificationService {
     private PushNotificationRequest getSamplePushNotificationRequest(Map<String, String> map) {
         PushNotificationRequest request = new PushNotificationRequest(
                 map.get("topic"),
-                map.get("title"),
-                map.get("message"));
+                new String(map.get("title").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
+                new String(map.get("message").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         return request;
     }
 }

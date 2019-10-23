@@ -41,7 +41,8 @@ public class FirebaseService {
     private Message.Builder getPreconfiguredMessageBuilder(PushNotificationRequest request) {
         AndroidConfig androidConfig = getAndroidConfig(request.getTopic());
         ApnsConfig apnsConfig = getApnsConfig(request.getTopic());
-        return Message.builder().setApnsConfig(apnsConfig).setAndroidConfig(androidConfig);
+        return Message.builder().setApnsConfig(apnsConfig).setAndroidConfig(androidConfig).setNotification(
+                new Notification(request.getTitle(), request.getMessage()));
     }
 
 }
