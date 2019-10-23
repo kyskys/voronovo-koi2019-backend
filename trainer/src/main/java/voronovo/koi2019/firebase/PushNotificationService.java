@@ -12,8 +12,11 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class PushNotificationService {
 
-    @Value("#{${app.notifications.defaults}}")
-    private Map<String, String> defaults;
+    @Value("#{${app.notifications.question.new}}")
+    private Map<String, String> newQuestionMap;
+
+    @Value("#{${app.notifications.question.solved}}")
+    private Map<String, String> solvedQuestionMap;
 
     private FirebaseService service;
 
@@ -21,55 +24,19 @@ public class PushNotificationService {
         this.service = service;
     }
 
-    @Scheduled(initialDelay = 60000, fixedDelay = 60000)
-    public void sendSamplePushNotification() {
+    public void sendNewQuestionNotification() {
         try {
-            service.sendMessageWithoutData(getSamplePushNotificationRequest());
+            service.sendMessage(getIsNewQuestionData(true), getSamplePushNotificationRequest(this.newQuestionMap));
         } catch (InterruptedException | ExecutionException e) {
-            //logger.error(e.getMessage());
+            throw new RuntimeException("error during sending new question push notification", e);
         }
     }
-
-    public void sendIsNewQuestionNotification(boolean isNewQuestion) {
+    public void sendSolvedQuestionNotification() {
         try {
-            service.sendMessage(getIsNewQuestionData(isNewQuestion), getSamplePushNotificationRequest());
+            service.sendMessage(getIsNewQuestionData(false), getSamplePushNotificationRequest(this.solvedQuestionMap));
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException("error during sending push notification", e);
+            throw new RuntimeException("error during sending solved question push notification", e);
         }
-    }
-
-    public void sendPushNotification(PushNotificationRequest request) {
-        try {
-            service.sendMessage(getSamplePayloadData(), request);
-        } catch (InterruptedException | ExecutionException e) {
-            //logger.error(e.getMessage());
-        }
-    }
-
-    public void sendPushNotificationWithoutData(PushNotificationRequest request) {
-        try {
-            service.sendMessageWithoutData(request);
-        } catch (InterruptedException | ExecutionException e) {
-            //logger.error(e.getMessage());
-        }
-    }
-
-
-    public void sendPushNotificationToToken(PushNotificationRequest request) {
-        try {
-            service.sendMessageToToken(request);
-        } catch (InterruptedException | ExecutionException e) {
-            //logger.error(e.getMessage());
-        }
-    }
-
-
-    private Map<String, String> getSamplePayloadData() {
-        Map<String, String> pushData = new HashMap<>();
-        pushData.put("messageId", defaults.get("payloadMessageId"));
-        pushData.put("text", defaults.get("payloadData") + " " + LocalDateTime.now());
-        pushData.put("isNewQuestion", "true");
-        return pushData;
     }
 
     private Map<String, String> getIsNewQuestionData(boolean isNewQuestion) {
@@ -78,12 +45,11 @@ public class PushNotificationService {
         return pushData;
     }
 
-    private PushNotificationRequest getSamplePushNotificationRequest() {
+    private PushNotificationRequest getSamplePushNotificationRequest(Map<String, String> map) {
         PushNotificationRequest request = new PushNotificationRequest(
-                defaults.get("topic"),
-                defaults.get("title"),
-                defaults.get("message"),
-                null);
+                map.get("topic"),
+                map.get("title"),
+                map.get("message"));
         return request;
     }
 }

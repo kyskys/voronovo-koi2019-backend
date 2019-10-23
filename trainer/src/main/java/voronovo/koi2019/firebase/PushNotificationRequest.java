@@ -11,5 +11,4 @@ public class PushNotificationRequest {
     private String topic;
     private String title;
     private String message;
-    private String token;
 }

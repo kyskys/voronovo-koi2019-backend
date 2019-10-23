@@ -1,6 +1,5 @@
 package voronovo.koi2019.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +30,7 @@ public class QuestionController {
             if (question.getWinner() == null) {
                 question.setWinner(winner);
                 questionRepository.save(question);
-                pushNotificationService.sendIsNewQuestionNotification(false);
+                pushNotificationService.sendSolvedQuestionNotification();
                 return ResponseEntity.ok(true);
             } else {
                 return ResponseEntity.ok(false);
@@ -43,7 +42,7 @@ public class QuestionController {
     @PostMapping("questions")
     public ResponseEntity<Question> saveScore(@RequestBody Question question) {
         Question result = questionRepository.save(question);
-        pushNotificationService.sendIsNewQuestionNotification(true);
+        pushNotificationService.sendNewQuestionNotification();
         return ResponseEntity.ok(result);
     }
 }
