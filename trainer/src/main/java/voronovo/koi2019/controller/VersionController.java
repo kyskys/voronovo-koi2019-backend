@@ -19,7 +19,7 @@ public class VersionController {
         return ResponseEntity.ok(
                 String.format("{" +
                         "\"version\": %s, " +
-                        "\"href\": %s" +
+                        "\"href\": '%s'" +
                         "}", version, href)
         );
     }
