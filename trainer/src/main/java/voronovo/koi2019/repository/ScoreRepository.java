@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RepositoryRestResource
 public interface ScoreRepository extends PagingAndSortingRepository<Score, Long> {
-    @Query(value = "select new Score(min(s.name), min(s.category), min(s.time), s.percent) from Score s where s.category like :category group by lower(s.name), s.percent order by min(s.time) asc, min(s.name) desc",
+    @Query(value = "select new Score(min(s.name), min(s.category), min(s.time), max(s.percent)) from Score s where s.category like :category group by lower(s.name) order by min(s.time) asc, min(s.name) desc",
             countQuery = "select count(s) from Score s")
     Page<Score> findAllByCategoryLikeOrderByTimeAscNameDesc(@RequestParam String category, Pageable pageable);
 
