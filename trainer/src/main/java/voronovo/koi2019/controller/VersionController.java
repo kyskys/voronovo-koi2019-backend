@@ -1,6 +1,5 @@
 package voronovo.koi2019.controller;
 
-import com.sun.javafx.binding.StringFormatter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
