@@ -17,5 +17,5 @@ public class Test {
     private Date startedAt;
     private boolean active;
     @OneToMany(mappedBy = "test")
-    private List<TestItem> testItems;
+    private List<TestItem> items;
 }
