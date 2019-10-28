@@ -1,6 +1,6 @@
 package voronovo.koi2019.generation.type;
 
-import voronovo.koi2019.condition.PreCondition;
+import voronovo.koi2019.generation.condition.PreCondition;
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
 
 import java.util.EnumSet;

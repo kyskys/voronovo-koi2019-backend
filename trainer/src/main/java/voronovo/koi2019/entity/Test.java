@@ -15,7 +15,8 @@ public class Test {
     private String name;
     @Temporal(TemporalType.TIMESTAMP)
     private Date startedAt;
+    private Long timeToComplete;
     private boolean active;
-    @OneToMany(mappedBy = "test")
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
     private List<TestItem> items;
 }

@@ -1,5 +1,6 @@
 package voronovo.koi2019.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ public class TestItem {
     private List<String> allOptions;
     private String correctAnswer;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Test test;
 
     public TestItem(String expression, List<String> allOptions, String correctAnswer) {

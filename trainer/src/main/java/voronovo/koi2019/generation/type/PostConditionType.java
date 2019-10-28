@@ -1,6 +1,6 @@
 package voronovo.koi2019.generation.type;
 
-import voronovo.koi2019.condition.PostCondition;
+import voronovo.koi2019.generation.condition.PostCondition;
 import voronovo.koi2019.entity.TestItem;
 import voronovo.koi2019.generation.test.DefaultTestBuilder;
 

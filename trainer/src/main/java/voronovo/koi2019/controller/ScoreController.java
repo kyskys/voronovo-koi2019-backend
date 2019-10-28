@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import voronovo.koi2019.entity.ControllerDummy;
+import voronovo.koi2019.entity.ControllerWrapper;
 import voronovo.koi2019.repository.ScoreRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class ScoreController {
     }
 
     @PostMapping("deleteAll")
-    public void deleteAll(@RequestBody ControllerDummy<List<Long>> request) {
+    public void deleteAll(@RequestBody ControllerWrapper<List<Long>> request) {
         scoreRepository.deleteAll(request.getValue());
     }
 }

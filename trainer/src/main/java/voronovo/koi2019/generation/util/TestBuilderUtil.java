@@ -1,7 +1,7 @@
 package voronovo.koi2019.generation.util;
 
-import voronovo.koi2019.condition.PostCondition;
-import voronovo.koi2019.condition.PreCondition;
+import voronovo.koi2019.generation.condition.PostCondition;
+import voronovo.koi2019.generation.condition.PreCondition;
 import voronovo.koi2019.generation.calculator.Calculator;
 import voronovo.koi2019.generation.calculator.JavaScriptCalculator;
 import voronovo.koi2019.generation.test.AbstractCodeWrittenBuilder;

@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ControllerDummy<T> {
+public class ControllerWrapper<T> {
     private T value;
 }

@@ -1,4 +1,4 @@
-package voronovo.koi2019.condition;
+package voronovo.koi2019.generation.condition;
 
 import lombok.Data;
 import voronovo.koi2019.generation.type.PreConditionType;
