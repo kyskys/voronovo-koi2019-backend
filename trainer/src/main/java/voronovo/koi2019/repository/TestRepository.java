@@ -16,6 +16,6 @@ public interface TestRepository extends PagingAndSortingRepository<Test, Long> {
     @Transactional
     @RestResource(exported = false)
     @Modifying
-    @Query("delete from Score where id in (:ids)")
+    @Query("delete from Test where id in (:ids)")
     void deleteAll(@RequestParam List<Long> ids);
 }
