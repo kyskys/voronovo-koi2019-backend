@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
 import voronovo.koi2019.entity.Score;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RepositoryRestResource
+@CrossOrigin
 public interface ScoreRepository extends PagingAndSortingRepository<Score, Long> {
     @Query(value = "select new Score(min(s.name), min(s.category), min(s.time), max(s.percent)) from Score s where s.category like :category group by lower(s.name) order by min(s.time) asc, min(s.name) desc",
             countQuery = "select count(s) from Score s")
