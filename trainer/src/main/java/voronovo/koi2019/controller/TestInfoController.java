@@ -1,13 +1,12 @@
 package voronovo.koi2019.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import voronovo.koi2019.entity.ControllerWrapper;
 import voronovo.koi2019.entity.Test;
 import voronovo.koi2019.repository.TestRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,5 +32,10 @@ public class TestInfoController {
             }
         });
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("tests/deleteAll")
+    public void deleteAll(@RequestBody ControllerWrapper<List<Long>> request) {
+        testRepository.deleteAll(request.getValue());
     }
 }
