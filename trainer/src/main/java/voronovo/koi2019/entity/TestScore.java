@@ -11,8 +11,8 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @NamedEntityGraph(
-        name = "TestScore.question",
-        attributeNodes = @NamedAttributeNode("question")
+        name = "TestScore.testItem",
+        attributeNodes = @NamedAttributeNode("testItem")
 )
 public class TestScore {
     @Id
@@ -21,17 +21,17 @@ public class TestScore {
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    private TestItem question;
+    private TestItem testItem;
     private String answer;
 
-    public TestScore(String name, TestItem question, String answer) {
+    public TestScore(String name, TestItem testItem, String answer) {
         this.name = name;
-        this.question = question;
+        this.testItem = testItem;
         this.answer = answer;
     }
 
     @JsonProperty("question")
     private String getQuestion() {
-        return this.question.getCorrectAnswer();
+        return this.testItem.getCorrectAnswer();
     }
 }

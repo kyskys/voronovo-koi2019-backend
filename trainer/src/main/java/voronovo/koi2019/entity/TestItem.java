@@ -22,7 +22,7 @@ public class TestItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Test test;
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "testItem", cascade = CascadeType.ALL)
     private List<TestScore> scores;
 
     public TestItem(String expression, List<String> allOptions, String correctAnswer) {
