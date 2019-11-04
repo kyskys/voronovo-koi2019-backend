@@ -22,10 +22,16 @@ public class TestItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Test test;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<TestScore> scores;
 
     public TestItem(String expression, List<String> allOptions, String correctAnswer) {
         this.expression = expression;
         this.allOptions = allOptions;
         this.correctAnswer = correctAnswer;
+    }
+
+    public TestItem(Long id) {
+        this.id = id;
     }
 }

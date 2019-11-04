@@ -1,21 +1,26 @@
 package voronovo.koi2019.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import voronovo.koi2019.entity.ControllerWrapper;
 import voronovo.koi2019.entity.Test;
+import voronovo.koi2019.entity.TestItem;
+import voronovo.koi2019.entity.TestScore;
 import voronovo.koi2019.repository.TestRepository;
+import voronovo.koi2019.repository.TestScoreRepository;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 public class TestInfoController {
     private final TestRepository testRepository;
+    private final TestScoreRepository testScoreRepository;
 
-    public TestInfoController(TestRepository testRepository) {
+    public TestInfoController(TestRepository testRepository, TestScoreRepository testScoreRepository) {
         this.testRepository = testRepository;
+        this.testScoreRepository = testScoreRepository;
     }
 
 
@@ -33,5 +38,21 @@ public class TestInfoController {
             }
         });
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("tests/{testId}/name/{name}")
+    public ResponseEntity addTestResultsForName(@PathVariable Long testId,
+                                                @PathVariable String name,
+                                                @RequestBody Map<Long, String> answers) {
+        answers.entrySet().stream()
+                .map(entry -> new TestScore(name, new TestItem(entry.getKey()), entry.getValue()))
+                .forEach(testScoreRepository::save);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("tests/{testId}/name/{name}")
+    public ResponseEntity<List<TestScore>> getTestResultsForName(@PathVariable Long testId,
+                                                                 @PathVariable String name) {
+        return ResponseEntity.ok(testScoreRepository.findAllByNameAndQuestion_Test_Id(name, testId));
     }
 }
