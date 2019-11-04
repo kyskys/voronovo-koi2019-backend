@@ -40,6 +40,11 @@ public class TestInfoController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("tests/deleteAll")
+    public void deleteAll(@RequestBody ControllerWrapper<List<Long>> request) {
+        testRepository.deleteAll(request.getValue());
+    }
+
     @PostMapping("tests/{testId}/name/{name}")
     public ResponseEntity addTestResultsForName(@PathVariable Long testId,
                                                 @PathVariable String name,

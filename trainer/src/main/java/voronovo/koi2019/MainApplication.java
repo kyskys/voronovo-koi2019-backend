@@ -16,8 +16,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
-import voronovo.koi2019.config.GeneratorNameConfig;
-import voronovo.koi2019.config.GeneratorSampleConfig;
 
 @SpringBootApplication
 @EnableSwagger2WebMvc
@@ -47,6 +45,7 @@ public class MainApplication extends SpringBootServletInitializer {
     public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+        config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);
