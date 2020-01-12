@@ -1,12 +1,9 @@
 package voronovo.koi2019.firebase;
 
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.Strings;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
