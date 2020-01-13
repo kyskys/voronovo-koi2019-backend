@@ -21,10 +21,12 @@ public class CategoryNode {
     @JsonIgnore
     private String name;
     private String title;
+    private Integer amount;
 
-    public CategoryNode(String name, String title) {
+    public CategoryNode(String name, String title, Integer amount) {
         this.name = name;
         this.title = title;
+        this.amount = amount;
     }
 
     @JsonGetter("nodes")

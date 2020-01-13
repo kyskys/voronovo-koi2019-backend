@@ -18,7 +18,8 @@ public class ConstantsHolder {
     public static final String DOUBLE_REGEX = "([+-]?\\d+\\.\\d+)";
     public static final String ADDITIONAL_SEPARATOR = "<>";
     public static final String BUILDERS_SEPARATOR = "\\\\";
-    public static final Integer DEFAULT_BATCH_SIZE = 6;
+    public static final Integer DEFAULT_BATCH_SIZE = 15;
+    public static final Integer DEFAULT_AMOUNT_OF_QUESTIONS = 15;
     public static final Integer DEFAULT_INCORRECT_ANSWERS = 3;
     public static final String SIGN_REGEX = "[+-/*()]";
     public static final String IS_INTEGER_REGEX = "-?\\d+(\\.\\d+)+";
