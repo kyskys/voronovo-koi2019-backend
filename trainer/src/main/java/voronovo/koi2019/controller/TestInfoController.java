@@ -2,6 +2,7 @@ package voronovo.koi2019.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import voronovo.koi2019.dto.TestNameDto;
 import voronovo.koi2019.entity.ControllerWrapper;
 import voronovo.koi2019.entity.Test;
 import voronovo.koi2019.entity.TestItem;
@@ -12,6 +13,8 @@ import voronovo.koi2019.repository.TestScoreRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 public class TestInfoController {
@@ -45,9 +48,15 @@ public class TestInfoController {
         testRepository.deleteAll(request.getValue());
     }
 
+    @GetMapping("tests/names")
+    public List<TestNameDto> getTestsNames() {
+        return StreamSupport.stream(testRepository.findAll().spliterator(), false)
+                .map(test -> new TestNameDto(test.getId(), test.getName()))
+                .collect(Collectors.toList());
+    }
+
     @PostMapping("tests/{testId}/name/{name}")
-    public ResponseEntity addTestResultsForName(@PathVariable Long testId,
-                                                @PathVariable String name,
+    public ResponseEntity addTestResultsForName(@PathVariable String name,
                                                 @RequestBody Map<Long, String> answers) {
         answers.entrySet().stream()
                 .map(entry -> new TestScore(name, new TestItem(entry.getKey()), entry.getValue()))
@@ -59,5 +68,10 @@ public class TestInfoController {
     public ResponseEntity<List<TestScore>> getTestResultsForName(@PathVariable Long testId,
                                                                  @PathVariable String name) {
         return ResponseEntity.ok(testScoreRepository.findAllByNameAndTestItem_Test_Id(name, testId));
+    }
+
+    @GetMapping("tests/{testId}")
+    public ResponseEntity<List<TestScore>> getTestResultsForTest(@PathVariable Long testId) {
+        return ResponseEntity.ok(testScoreRepository.findAllByTestItem_Test_Id(testId));
     }
 }

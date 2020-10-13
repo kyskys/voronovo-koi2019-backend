@@ -12,4 +12,7 @@ import java.util.List;
 public interface TestScoreRepository extends PagingAndSortingRepository<TestScore, Long> {
     @EntityGraph(value = "TestScore.testItem", type = EntityGraph.EntityGraphType.LOAD)
     List<TestScore> findAllByNameAndTestItem_Test_Id(String name, Long testId);
+
+    @EntityGraph(value = "TestScore.testItem", type = EntityGraph.EntityGraphType.LOAD)
+    List<TestScore> findAllByTestItem_Test_Id(Long testId);
 }
