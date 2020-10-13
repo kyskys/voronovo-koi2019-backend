@@ -70,7 +70,7 @@ public class TestInfoController {
         return ResponseEntity.ok(testScoreRepository.findAllByNameAndTestItem_Test_Id(name, testId));
     }
 
-    @GetMapping("tests/{testId}")
+    @GetMapping("tests/results/{testId}")
     public ResponseEntity<List<TestScore>> getTestResultsForTest(@PathVariable Long testId) {
         return ResponseEntity.ok(testScoreRepository.findAllByTestItem_Test_Id(testId));
     }
