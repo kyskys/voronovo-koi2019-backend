@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -23,6 +24,8 @@ public class TestScore {
     @JsonIgnore
     private TestItem testItem;
     private String answer;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
 
     public TestScore(String name, TestItem testItem, String answer) {
         this.name = name;
@@ -30,8 +33,18 @@ public class TestScore {
         this.answer = answer;
     }
 
-    @JsonProperty("question")
-    private String getQuestion() {
+    @PrePersist
+    private void prePersist() {
+        this.createDate = new Date();
+    }
+
+    @JsonProperty("correctAnswer")
+    private String correctAnswer() {
         return this.testItem.getCorrectAnswer();
+    }
+
+    @JsonProperty("expression")
+    private String getExpression() {
+        return this.testItem.getExpression();
     }
 }
