@@ -3,6 +3,8 @@ package voronovo.koi2019.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,6 +24,7 @@ public class TestItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Test test;
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "testItem", cascade = CascadeType.ALL)
     private List<TestScore> scores;
 
